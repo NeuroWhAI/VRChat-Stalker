@@ -53,7 +53,7 @@ namespace VRChat_Stalker
             if (File.Exists("alarm.mp3"))
             {
                 m_mediaAlarm = new MediaPlayer();
-                m_mediaAlarm.Open(new Uri("alarm.mp3"));
+                m_mediaAlarm.Open(new Uri(Path.Combine(Directory.GetCurrentDirectory(), "alarm.mp3")));
 
                 UserChanged += (imageUrl, name, status) =>
                   {
