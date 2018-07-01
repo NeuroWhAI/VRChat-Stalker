@@ -43,6 +43,13 @@ namespace VRChat_Stalker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Vm.Init();
+
+
+            // Check update
+            if (Vm.CheckUpdate())
+            {
+                ShowDownloadAlarm();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -75,7 +82,14 @@ namespace VRChat_Stalker
             else if (tag == "Update")
             {
                 // Check update
-
+                if (Vm.CheckUpdate())
+                {
+                    ShowDownloadAlarm();
+                }
+                else
+                {
+                    this.snackBar.MessageQueue.Enqueue("No update required!");
+                }
             }
             else if (tag == "Hide")
             {
@@ -88,6 +102,14 @@ namespace VRChat_Stalker
                 this.Close();
                 Application.Current.Shutdown();
             }
+        }
+
+        private void ShowDownloadAlarm()
+        {
+            this.snackBar.MessageQueue.Enqueue("New version detected!", "DOWNLOAD", () =>
+            {
+                System.Diagnostics.Process.Start(@"http://neurowhai.tistory.com/202");
+            });
         }
 
         private void Button_Sort_Name_Click(object sender, RoutedEventArgs e)
