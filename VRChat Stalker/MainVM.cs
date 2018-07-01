@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Threading;
 using System.Windows.Media;
+using System.Net;
 
 namespace VRChat_Stalker
 {
@@ -121,6 +122,46 @@ namespace VRChat_Stalker
             m_checkTimer.Stop();
 
             SaveUsers();
+        }
+
+        private Version GetLatestVersion()
+        {
+            try
+            {
+                var client = new WebClient();
+                string info = client.DownloadString(new Uri(@"https://raw.githubusercontent.com/NeuroWhAI/VRChat-Stalker/release/VRChat%20Stalker/Properties/AssemblyInfo.cs"));
+                
+                int index = info.LastIndexOf("AssemblyVersion");
+                index = info.IndexOf('\"', index + 1);
+
+                int endIndex = info.IndexOf('\"', index + 1);
+
+                if (endIndex > index)
+                {
+                    return Version.Parse(info.Substring(index + 1, endIndex - index - 1));
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+
+
+            return null;
+        }
+
+        public bool CheckUpdate()
+        {
+            var latestVersion = GetLatestVersion();
+
+            if (latestVersion == null)
+            {
+                return false;
+            }
+
+            var thisVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+            return latestVersion > thisVersion;
         }
 
         private void SaveUsers()
