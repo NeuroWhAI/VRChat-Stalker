@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRChat Stalker", "VRChat Stalker\VRChat Stalker.csproj", "{D0641528-8A18-4380-A8CE-082173E263B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRChatApi", "VRChatApi\VRChatApi.csproj", "{49DF3224-B9AD-4E78-A2A9-56A92DA5F68E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0641528-8A18-4380-A8CE-082173E263B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0641528-8A18-4380-A8CE-082173E263B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0641528-8A18-4380-A8CE-082173E263B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0641528-8A18-4380-A8CE-082173E263B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49DF3224-B9AD-4E78-A2A9-56A92DA5F68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49DF3224-B9AD-4E78-A2A9-56A92DA5F68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49DF3224-B9AD-4E78-A2A9-56A92DA5F68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49DF3224-B9AD-4E78-A2A9-56A92DA5F68E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3AF87A6-F002-4F90-BE67-4A7010E95C68}
+	EndGlobalSection
+EndGlobal
