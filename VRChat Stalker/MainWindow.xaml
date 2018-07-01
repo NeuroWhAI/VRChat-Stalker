@@ -35,7 +35,7 @@
                                 <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
-                        <ListBoxItem>
+                        <ListBoxItem Tag="Logout">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Width="24" Height="24">
                                     <Canvas Width="24" Height="24">
@@ -45,7 +45,7 @@
                                 <TextBlock FontSize="16" Margin="10,0" VerticalAlignment="Center">Logout</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
-                        <ListBoxItem>
+                        <ListBoxItem Tag="Option">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Width="24" Height="24">
                                     <Canvas Width="24" Height="24">
@@ -55,7 +55,17 @@
                                 <TextBlock FontSize="16" Margin="10,0" VerticalAlignment="Center">Option</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
-                        <ListBoxItem>
+                        <ListBoxItem Tag="Update">
+                            <StackPanel Orientation="Horizontal">
+                                <Viewbox Width="24" Height="24">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="Black" />
+                                    </Canvas>
+                                </Viewbox>
+                                <TextBlock FontSize="16" Margin="10,0" VerticalAlignment="Center">Check for updates</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Tag="Hide">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Width="24" Height="24">
                                     <Canvas Width="24" Height="24">
@@ -65,7 +75,7 @@
                                 <TextBlock FontSize="16" Margin="10,0" VerticalAlignment="Center">Hide</TextBlock>
                             </StackPanel>
                         </ListBoxItem>
-                        <ListBoxItem>
+                        <ListBoxItem Tag="Exit">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Width="24" Height="24">
                                     <Canvas Width="24" Height="24">

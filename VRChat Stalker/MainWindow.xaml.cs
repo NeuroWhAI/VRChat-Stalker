@@ -55,7 +55,10 @@ namespace VRChat_Stalker
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender == this.listMainMenu.Items[0])
+            var item = sender as ListBoxItem;
+            string tag = (string)item.Tag;
+
+            if (tag == "Logout")
             {
                 // Logout
                 var loginWin = new LoginWindow();
@@ -64,17 +67,22 @@ namespace VRChat_Stalker
                 this.Close();
                 loginWin.Show();
             }
-            else if(sender == this.listMainMenu.Items[1])
+            else if (tag == "Option")
             {
                 // Option
 
             }
-            else if (sender == this.listMainMenu.Items[2])
+            else if (tag == "Update")
+            {
+                // Check update
+
+            }
+            else if (tag == "Hide")
             {
                 // Hide
                 this.Hide();
             }
-            else if (sender == this.listMainMenu.Items[3])
+            else if (tag == "Exit")
             {
                 // Exit
                 this.Close();
