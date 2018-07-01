@@ -25,6 +25,9 @@ namespace VRChat_Stalker
 
         public LoginVM()
         {
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+
             AutoLogin = File.Exists(LoginFile);
         }
 
