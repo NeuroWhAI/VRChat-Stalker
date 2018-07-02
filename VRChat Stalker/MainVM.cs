@@ -122,9 +122,12 @@ namespace VRChat_Stalker
 
         public void Close()
         {
-            m_checkTimer.Stop();
+            if (m_checkTimer.IsEnabled)
+            {
+                m_checkTimer.Stop();
 
-            SaveUsers();
+                SaveUsers().Wait();
+            }
         }
 
         private Version GetLatestVersion()
@@ -167,36 +170,39 @@ namespace VRChat_Stalker
             return latestVersion > thisVersion;
         }
 
-        private void SaveUsers()
+        private Task SaveUsers()
         {
-            try
+            return Task.Factory.StartNew(()=>
             {
-                using (var bw = new BinaryWriter(new FileStream("_users.dat", FileMode.Create)))
+                try
                 {
-                    bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-                    bw.Write(Users.Count);
-
-                    foreach (var user in Users)
+                    using (var bw = new BinaryWriter(new FileStream("_users.dat", FileMode.Create)))
                     {
-                        bw.Write(user.Id);
-                        bw.Write(user.Star);
-                        bw.Write(user.IsTracked);
+                        bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+                        bw.Write(Users.Count);
+
+                        foreach (var user in Users)
+                        {
+                            bw.Write(user.Id);
+                            bw.Write(user.Star);
+                            bw.Write(user.IsTracked);
+                        }
+
+
+                        bw.Close();
                     }
 
-
-                    bw.Close();
+                    File.Copy("_users.dat", "users.dat", true);
+                    File.Delete("_users.dat");
                 }
-
-                File.Copy("_users.dat", "users.dat", true);
-                File.Delete("_users.dat");
-            }
-            catch (Exception)
-            {
+                catch (Exception)
+                {
 #if DEBUG
-                throw;
+                    throw;
 #endif
-            }
+                }
+            });
         }
 
         private void LoadUsers()
@@ -255,12 +261,18 @@ namespace VRChat_Stalker
 
             var onlineUsers = await GetFriends(false);
 
-            foreach (var user in Users)
+            for (int i = 0; i < Users.Count; ++i)
             {
+                var user = Users[i];
+
                 if (user.Location != "offline" && onlineUsers.Any(u => u.Id == user.Id) == false)
                 {
                     user.Location = "offline";
                     user.StatusText = "Offline";
+
+                    // Refresh
+                    Users.RemoveAt(i);
+                    Users.Insert(i, user);
 
                     // Alarm offline.
                     if (user.IsTracked)
@@ -273,6 +285,7 @@ namespace VRChat_Stalker
             foreach (var user in onlineUsers)
             {
                 VRCUser target = null;
+                int targetIndex = 0;
 
                 foreach (var u in Users)
                 {
@@ -281,6 +294,8 @@ namespace VRChat_Stalker
                         target = u;
                         break;
                     }
+
+                    ++targetIndex;
                 }
 
                 if (target == null)
@@ -327,18 +342,42 @@ namespace VRChat_Stalker
                         }
                     }
 
-                    target.Name = user.Name;
-                    target.Location = user.Location;
-                    target.ImageUrl = user.ImageUrl;
-                    target.StatusText = user.StatusText;
+
+                    bool changed = false;
+
+                    if (target.Name != user.Name)
+                    {
+                        target.Name = user.Name;
+                        changed = true;
+                    }
+                    if (target.Location != user.Location)
+                    {
+                        target.Location = user.Location;
+                        changed = true;
+                    }
+                    if (target.ImageUrl != user.ImageUrl)
+                    {
+                        target.ImageUrl = user.ImageUrl;
+                        changed = true;
+                    }
+                    if (target.StatusText != user.StatusText)
+                    {
+                        target.StatusText = user.StatusText;
+                        changed = true;
+                    }
+
+
+                    if (changed)
+                    {
+                        // Refresh
+                        Users.RemoveAt(targetIndex);
+                        Users.Insert(targetIndex, target);
+                    }
                 }
             }
 
-            
-            UserListView.Refresh();
 
-
-            SaveUsers();
+            await SaveUsers();
 
 
             m_checkTimer.Start();
