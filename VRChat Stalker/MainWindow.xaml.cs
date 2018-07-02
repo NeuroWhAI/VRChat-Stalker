@@ -102,6 +102,10 @@ namespace VRChat_Stalker
                 this.Close();
                 Application.Current.Shutdown();
             }
+
+
+            // Close side menu.
+            this.btnToggleMenu.IsChecked = false;
         }
 
         private void ShowDownloadAlarm()
