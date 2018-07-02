@@ -91,6 +91,7 @@ namespace VRChat_Stalker
 
         public TimeSpan UpdateDelay { get; set; } = TimeSpan.FromSeconds(8);
         private DispatcherTimer m_checkTimer = new DispatcherTimer();
+        private DispatcherTimer m_updateTimer = new DispatcherTimer();
         private Thread m_updateTask = null;
         private bool m_onUpdate = false;
         private Queue<UserChangedEventArgs> m_userChangedArgs = new Queue<UserChangedEventArgs>();
@@ -120,11 +121,16 @@ namespace VRChat_Stalker
 
 
             m_checkTimer.Stop();
-
             m_checkTimer = new DispatcherTimer();
             m_checkTimer.Interval = TimeSpan.FromSeconds(1);
             m_checkTimer.Tick += CheckTimer_Tick;
             m_checkTimer.Start();
+
+            m_updateTimer.Stop();
+            m_updateTimer = new DispatcherTimer();
+            m_updateTimer.Interval = this.UpdateDelay;
+            m_updateTimer.Tick += UpdateTimer_Tick;
+            m_updateTimer.Start();
 
 
             m_onUpdate = true;
@@ -135,6 +141,7 @@ namespace VRChat_Stalker
         public void Close()
         {
             m_checkTimer.Stop();
+            m_updateTimer.Stop();
 
 
             if (m_updateTask != null)
@@ -270,6 +277,11 @@ namespace VRChat_Stalker
             }
         }
 
+        private void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            UserListView.Refresh();
+        }
+
         private void EnqueueUserChangedEvent(string imgUrl, string userName, string userStatus)
         {
             lock (m_userChangedArgsLock)
@@ -378,9 +390,6 @@ namespace VRChat_Stalker
                         target.StatusText = user.StatusText;
                     }
                 }
-
-
-                UserListView.Dispatcher.Invoke(() => UserListView.Refresh());
 
 
                 SaveUsers();
