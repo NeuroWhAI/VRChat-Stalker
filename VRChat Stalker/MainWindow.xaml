@@ -122,71 +122,68 @@
                     <TextBox Grid.Column="1" Grid.Row="0" Margin="4" materialDesign:HintAssist.Hint="Search" TextChanged="TextBox_TextChanged"
                              x:Name="boxSearch">
                     </TextBox>
-                    <ScrollViewer Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="4"
-                                  HorizontalScrollBarVisibility="{Binding ElementName=listUser, Path=SelectedItem.HorizontalScrollBarVisibilityRequirement}"
-                                  VerticalScrollBarVisibility="{Binding ElementName=listUser, Path=SelectedItem.VerticalScrollBarVisibilityRequirement}" 
-                                  Padding="{Binding ElementName=listUser, Path=SelectedItem.MarginRequirement}">
-                        <ListBox x:Name="listUser" ItemsSource="{Binding UserListView}" HorizontalContentAlignment="Stretch">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <materialDesign:Card Padding="8">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-                                            <Ellipse VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"
+
+                    <ListBox x:Name="listUser" ItemsSource="{Binding UserListView}" HorizontalContentAlignment="Stretch"
+                             Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="4">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card Padding="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Ellipse VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"
                                                      Width="8" Height="8"
                                                      Fill="{Binding Status, Converter={StaticResource status2color}}"
                                                      ToolTip="{Binding Status}">
-                                            </Ellipse>
-                                            <Ellipse Margin="-4,0,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="5"
+                                        </Ellipse>
+                                        <Ellipse Margin="-4,0,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="5"
                                                      Height="90" Width="90"
                                                      ToolTip="{Binding Id}">
-                                                <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding ImageUrl}" Stretch="UniformToFill"/>
-                                                </Ellipse.Fill>
-                                            </Ellipse>
-                                            <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                                        VerticalAlignment="Bottom" Margin="16,0,0,0"
                                                        Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
                                                        Text="{Binding Name}"
                                                        Style="{DynamicResource MaterialDesignTitleTextBlock}"
                                                        ToolTip="{Binding Name}">
-                                            </TextBlock>
-                                            <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                                        VerticalAlignment="Top" Margin="16,4,0,0"
                                                        Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"
                                                        Text="{Binding StatusText}"
                                                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
                                                        ToolTip="{Binding StatusText}">
-                                            </TextBlock>
-                                            <materialDesign:RatingBar VerticalAlignment="Top" HorizontalAlignment="Right"
+                                        </TextBlock>
+                                        <materialDesign:RatingBar VerticalAlignment="Top" HorizontalAlignment="Right"
                                                                       Max="3" Grid.Row="0" Grid.RowSpan="2" Grid.Column="3"
                                                                       Value="{Binding Star, Mode=TwoWay}"
                                                                       ToolTip="Power of stalking.">
-                                            </materialDesign:RatingBar>
-                                            <ToggleButton Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"
+                                        </materialDesign:RatingBar>
+                                        <ToggleButton Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"
                                                           VerticalAlignment="Top" HorizontalAlignment="Right"
                                                           Margin="4,4,4,0"
                                                 Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
                                                 ToolTip="Set whether to stalk."
                                                 IsChecked="{Binding IsTracked, Mode=TwoWay}" />
-                                        </Grid>
-                                    </materialDesign:Card>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                     <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar"
                                              Grid.Row="1" Grid.ColumnSpan="2" />
