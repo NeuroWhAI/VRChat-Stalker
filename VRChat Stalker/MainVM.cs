@@ -517,7 +517,7 @@ namespace VRChat_Stalker
                         Id = res.id,
                         Name = res.displayName,
                         Location = res.location,
-                        ImageUrl = res.currentAvatarImageUrl,
+                        ImageUrl = res.currentAvatarThumbnailImageUrl,
                     };
 
                     user.StatusText = await ConvertLocation(res.location, res.id);
