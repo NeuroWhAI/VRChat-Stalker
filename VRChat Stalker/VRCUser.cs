@@ -19,7 +19,7 @@ namespace VRChat_Stalker
         public string Name { get; set; }
         public string Location { get; set; }
         public int Star { get; set; } = 1;
-        public bool IsTracked { get; set; } = true;
+        public bool IsTracked { get; set; } = false;
         public string ImageUrl { get; set; }
         public string StatusText { get; set; }
 
