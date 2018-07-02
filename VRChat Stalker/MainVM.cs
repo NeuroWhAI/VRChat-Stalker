@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.Threading;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Threading;
@@ -13,6 +14,13 @@ using System.Net;
 
 namespace VRChat_Stalker
 {
+    public class UserChangedEventArgs
+    {
+        public string ImageUrl { get; set; }
+        public string UserName { get; set; }
+        public string UserStatus { get; set; }
+    }
+
     public class MainVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -56,7 +64,7 @@ namespace VRChat_Stalker
                 m_mediaAlarm = new MediaPlayer();
                 m_mediaAlarm.Open(new Uri(Path.Combine(Directory.GetCurrentDirectory(), "alarm.mp3")));
 
-                UserChanged += (imageUrl, name, status) =>
+                UserChanged += (_) =>
                   {
                       m_mediaAlarm.Dispatcher.Invoke(() =>
                       {
@@ -81,9 +89,14 @@ namespace VRChat_Stalker
             Direction = ListSortDirection.Descending
         };
 
+        public TimeSpan UpdateDelay { get; set; } = TimeSpan.FromSeconds(8);
         private DispatcherTimer m_checkTimer = new DispatcherTimer();
+        private Thread m_updateTask = null;
+        private bool m_onUpdate = false;
+        private Queue<UserChangedEventArgs> m_userChangedArgs = new Queue<UserChangedEventArgs>();
+        private readonly object m_userChangedArgsLock = new object();
 
-        public event Action<string, string, string> UserChanged;
+        public event Action<UserChangedEventArgs> UserChanged;
 
         private MediaPlayer m_mediaAlarm = null;
 
@@ -106,20 +119,31 @@ namespace VRChat_Stalker
             LoadUsers();
 
 
-            if (m_checkTimer != null)
-            {
-                m_checkTimer.Stop();
-            }
+            m_checkTimer.Stop();
 
             m_checkTimer = new DispatcherTimer();
-            m_checkTimer.Interval = TimeSpan.FromSeconds(8);
+            m_checkTimer.Interval = TimeSpan.FromSeconds(1);
             m_checkTimer.Tick += CheckTimer_Tick;
             m_checkTimer.Start();
+
+
+            m_onUpdate = true;
+            m_updateTask = new Thread(new ThreadStart(Update));
+            m_updateTask.Start();
         }
 
         public void Close()
         {
             m_checkTimer.Stop();
+
+
+            if (m_updateTask != null)
+            {
+                m_onUpdate = false;
+                m_updateTask.Join();
+                m_updateTask = null;
+            }
+            
 
             SaveUsers();
         }
@@ -235,100 +259,132 @@ namespace VRChat_Stalker
             UserListView.Refresh();
         }
 
-        private async void CheckTimer_Tick(object sender, EventArgs e)
+        private void CheckTimer_Tick(object sender, EventArgs e)
         {
-            m_checkTimer.Stop();
-
-
-            var onlineUsers = await GetFriends(false);
-
-            foreach (var user in Users)
+            lock (m_userChangedArgsLock)
             {
-                if (user.Location != "offline" && onlineUsers.Any(u => u.Id == user.Id) == false)
+                while (m_userChangedArgs.Count > 0)
                 {
-                    user.Location = "offline";
-                    user.StatusText = "Offline";
-
-                    // Alarm offline.
-                    if (user.IsTracked)
-                    {
-                        UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
-                    }
+                    UserChanged?.Invoke(m_userChangedArgs.Dequeue());
                 }
             }
+        }
 
-            foreach (var user in onlineUsers)
+        private void EnqueueUserChangedEvent(string imgUrl, string userName, string userStatus)
+        {
+            lock (m_userChangedArgsLock)
             {
-                VRCUser target = null;
-
-                foreach (var u in Users)
+                m_userChangedArgs.Enqueue(new UserChangedEventArgs()
                 {
-                    if (user.Id == u.Id)
-                    {
-                        target = u;
-                        break;
-                    }
-                }
-
-                if (target == null)
-                {
-                    Users.Add(user);
-
-                    // Alarm online.
-                    if (user.IsTracked)
-                    {
-                        UserChanged?.Invoke(user.ImageUrl, user.Name, $"Online ({user.StatusText})");
-                    }
-                }
-                else
-                {
-                    if (target.IsTracked)
-                    {
-                        if (target.Status != user.Status)
-                        {
-                            // Alarm status changed.
-                            UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
-                        }
-                        else if (target.Star >= 2)
-                        {
-                            if (target.Location != user.Location)
-                            {
-                                // Alarm location changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
-                            }
-                        }
-
-                        if (target.Star >= 3)
-                        {
-                            if (target.Name != user.Name)
-                            {
-                                // Alarm name changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
-                            }
-
-                            if (target.ImageUrl != user.ImageUrl)
-                            {
-                                // Alarm image changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, "Avatar changed");
-                            }
-                        }
-                    }
-
-                    target.Name = user.Name;
-                    target.Location = user.Location;
-                    target.ImageUrl = user.ImageUrl;
-                    target.StatusText = user.StatusText;
-                }
+                    ImageUrl = imgUrl,
+                    UserName = userName,
+                    UserStatus = userStatus,
+                });
             }
+        }
 
-            
-            UserListView.Refresh();
+        private void Update()
+        {
+            while (m_onUpdate)
+            {
+                for (int t = 0; t < UpdateDelay.TotalMilliseconds; t += 100)
+                {
+                    if (m_onUpdate == false)
+                    {
+                        return;
+                    }
+
+                    Thread.Sleep(100);
+                }
 
 
-            SaveUsers();
+                var onlineUsers = GetFriends(false).Result;
+
+                foreach (var user in Users)
+                {
+                    if (user.Location != "offline" && onlineUsers.Any(u => u.Id == user.Id) == false)
+                    {
+                        user.Location = "offline";
+                        user.StatusText = "Offline";
+
+                        // Alarm offline.
+                        if (user.IsTracked)
+                        {
+                            EnqueueUserChangedEvent(user.ImageUrl, user.Name, user.StatusText);
+                        }
+                    }
+                }
+
+                foreach (var user in onlineUsers)
+                {
+                    VRCUser target = null;
+
+                    foreach (var u in Users)
+                    {
+                        if (user.Id == u.Id)
+                        {
+                            target = u;
+                            break;
+                        }
+                    }
+
+                    if (target == null)
+                    {
+                        Users.Add(user);
+
+                        // Alarm online.
+                        if (user.IsTracked)
+                        {
+                            EnqueueUserChangedEvent(user.ImageUrl, user.Name, $"Online ({user.StatusText})");
+                        }
+                    }
+                    else
+                    {
+                        if (target.IsTracked)
+                        {
+                            if (target.Status != user.Status)
+                            {
+                                // Alarm status changed.
+                                EnqueueUserChangedEvent(user.ImageUrl, user.Name, user.StatusText);
+                            }
+                            else if (target.Star >= 2)
+                            {
+                                if (target.Location != user.Location)
+                                {
+                                    // Alarm location changed.
+                                    EnqueueUserChangedEvent(user.ImageUrl, user.Name, user.StatusText);
+                                }
+                            }
+
+                            if (target.Star >= 3)
+                            {
+                                if (target.Name != user.Name)
+                                {
+                                    // Alarm name changed.
+                                    EnqueueUserChangedEvent(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
+                                }
+
+                                if (target.ImageUrl != user.ImageUrl)
+                                {
+                                    // Alarm image changed.
+                                    EnqueueUserChangedEvent(user.ImageUrl, user.Name, "Avatar changed");
+                                }
+                            }
+                        }
+
+                        target.Name = user.Name;
+                        target.Location = user.Location;
+                        target.ImageUrl = user.ImageUrl;
+                        target.StatusText = user.StatusText;
+                    }
+                }
 
 
-            m_checkTimer.Start();
+                UserListView.Dispatcher.Invoke(() => UserListView.Refresh());
+
+
+                SaveUsers();
+            }
         }
 
         public void FilterUsers(string filter)
