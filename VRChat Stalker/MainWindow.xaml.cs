@@ -136,14 +136,14 @@ namespace VRChat_Stalker
             Vm.FilterUsers(this.boxSearch.Text);
         }
 
-        private void Vm_UserChanged(string imageUrl, string name, string status)
+        private void Vm_UserChanged(UserChangedEventArgs e)
         {
             if (this.Visibility == Visibility.Visible)
             {
-                this.snackBar.MessageQueue.Enqueue(string.Format("{0} - {1}", name, status));
+                this.snackBar.MessageQueue.Enqueue(string.Format("{0} - {1}", e.UserName, e.UserStatus));
             }
 
-            this.trayIcon.ShowBalloonTip(5000, name, status,
+            this.trayIcon.ShowBalloonTip(5000, e.UserName, e.UserStatus,
                 System.Windows.Forms.ToolTipIcon.Info);
         }
     }

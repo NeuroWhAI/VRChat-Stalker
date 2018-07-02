@@ -238,6 +238,16 @@ namespace VRChat_Stalker
             UserListView.Refresh();
         }
 
+        private void OnUserChanged(string imageUrl, string userName, string userStatus)
+        {
+            UserChanged?.Invoke(new UserChangedEventArgs()
+            {
+                ImageUrl = imageUrl,
+                UserName = userName,
+                UserStatus = userStatus,
+            });
+        }
+
         private async void CheckTimer_Tick(object sender, EventArgs e)
         {
             m_checkTimer.Stop();
@@ -255,7 +265,7 @@ namespace VRChat_Stalker
                     // Alarm offline.
                     if (user.IsTracked)
                     {
-                        UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
+                        OnUserChanged(user.ImageUrl, user.Name, user.StatusText);
                     }
                 }
             }
@@ -280,7 +290,7 @@ namespace VRChat_Stalker
                     // Alarm online.
                     if (user.IsTracked)
                     {
-                        UserChanged?.Invoke(user.ImageUrl, user.Name, $"Online ({user.StatusText})");
+                        OnUserChanged(user.ImageUrl, user.Name, $"Online ({user.StatusText})");
                     }
                 }
                 else
@@ -290,14 +300,14 @@ namespace VRChat_Stalker
                         if (target.Status != user.Status)
                         {
                             // Alarm status changed.
-                            UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
+                            OnUserChanged(user.ImageUrl, user.Name, user.StatusText);
                         }
                         else if (target.Star >= 2)
                         {
                             if (target.Location != user.Location)
                             {
                                 // Alarm location changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, user.StatusText);
+                                OnUserChanged(user.ImageUrl, user.Name, user.StatusText);
                             }
                         }
 
@@ -306,13 +316,13 @@ namespace VRChat_Stalker
                             if (target.Name != user.Name)
                             {
                                 // Alarm name changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
+                                OnUserChanged(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
                             }
 
                             if (target.ImageUrl != user.ImageUrl)
                             {
                                 // Alarm image changed.
-                                UserChanged?.Invoke(user.ImageUrl, user.Name, "Avatar changed");
+                                OnUserChanged(user.ImageUrl, user.Name, "Avatar changed");
                             }
                         }
                     }
