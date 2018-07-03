@@ -20,6 +20,7 @@
     </Window.DataContext>
     <Window.Resources>
         <local:StatusToColorConverter x:Key="status2color"/>
+        <BooleanToVisibilityConverter x:Key="bool2visible"/>
     </Window.Resources>
     <materialDesign:DialogHost Identifier="RootDialog" SnackbarMessageQueue="{Binding ElementName=snackBar, Path=MessageQueue}">
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
@@ -184,6 +185,13 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+
+                    <ProgressBar Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1"
+                                 Style="{DynamicResource MaterialDesignCircularProgressBar}"
+                                 IsIndeterminate="True" Value="0"
+                                 Width="50" Height="50"
+                                 Visibility="{Binding OnLoading, Converter={StaticResource bool2visible}}">
+                    </ProgressBar>
 
                     <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar"
                                              Grid.Row="1" Grid.ColumnSpan="2" />

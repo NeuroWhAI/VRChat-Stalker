@@ -80,6 +80,17 @@ namespace VRChat_Stalker
         public VRChatApi.VRChatApi Vrc { get; set; }
         private WorldCache m_worldCache = new WorldCache();
 
+        private bool m_onLoading = false;
+        public bool OnLoading
+        {
+            get { return m_onLoading; }
+            set
+            {
+                m_onLoading = value;
+                OnPropertyChanged("OnLoading");
+            }
+        }
+
         public ObservableCollection<VRCUser> Users { get; set; } = new ObservableCollection<VRCUser>();
         public ListCollectionView UserListView { get; set; }
         private SortDescription m_sortDesc = new SortDescription()
@@ -87,6 +98,8 @@ namespace VRChat_Stalker
             PropertyName = "Star",
             Direction = ListSortDirection.Descending
         };
+
+        private Dictionary<string, int> m_userIdToIndex = new Dictionary<string, int>();
 
         private DispatcherTimer m_checkTimer = new DispatcherTimer();
 
@@ -106,11 +119,20 @@ namespace VRChat_Stalker
 
         public async void Init()
         {
+            OnLoading = true;
+
             Users = await GetAllFriends();
+
+            foreach (int i in Enumerable.Range(0, Users.Count))
+            {
+                m_userIdToIndex[Users[i].Id] = i;
+            }
 
             InitUserListView();
 
             LoadUsers();
+
+            OnLoading = false;
 
 
             m_checkTimer.Stop();
@@ -261,11 +283,36 @@ namespace VRChat_Stalker
 
             var onlineUsers = await GetFriends(false);
 
+            var onlineIndices = new List<int>();
+
+            foreach (var user in onlineUsers)
+            {
+                if (m_userIdToIndex.ContainsKey(user.Id))
+                {
+                    onlineIndices.Add(m_userIdToIndex[user.Id]);
+                }
+            }
+
+            onlineIndices.Sort();
+
+
+            int checkIndex = 0;
+
+            // Check offline.
             for (int i = 0; i < Users.Count; ++i)
             {
+                if (checkIndex < onlineIndices.Count
+                    && onlineIndices[checkIndex] == i)
+                {
+                    ++checkIndex;
+
+                    continue;
+                }
+
+
                 var user = Users[i];
 
-                if (user.Location != "offline" && onlineUsers.Any(u => u.Id == user.Id) == false)
+                if (user.Location != "offline")
                 {
                     user.Location = "offline";
                     user.StatusText = "Offline";
@@ -285,21 +332,18 @@ namespace VRChat_Stalker
             foreach (var user in onlineUsers)
             {
                 VRCUser target = null;
-                int targetIndex = 0;
+                int targetIndex = -1;
 
-                foreach (var u in Users)
+                if (m_userIdToIndex.ContainsKey(user.Id))
                 {
-                    if (user.Id == u.Id)
-                    {
-                        target = u;
-                        break;
-                    }
-
-                    ++targetIndex;
+                    targetIndex = m_userIdToIndex[user.Id];
+                    target = Users[targetIndex];
                 }
 
                 if (target == null)
                 {
+                    m_userIdToIndex[user.Id] = Users.Count;
+
                     Users.Add(user);
 
                     // Alarm online.
