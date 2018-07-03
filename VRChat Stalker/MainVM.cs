@@ -246,15 +246,12 @@ namespace VRChat_Stalker
                     int star = br.ReadInt32();
                     bool isTracked = br.ReadBoolean();
 
-                    foreach (var user in Users)
+                    if (m_userIdToIndex.ContainsKey(id))
                     {
-                        if (user.Id == id)
-                        {
-                            user.Star = star;
-                            user.IsTracked = isTracked;
+                        var user = Users[m_userIdToIndex[id]];
 
-                            break;
-                        }
+                        user.Star = star;
+                        user.IsTracked = isTracked;
                     }
                 }
 
