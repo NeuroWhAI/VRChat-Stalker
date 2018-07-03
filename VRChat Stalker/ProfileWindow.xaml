@@ -1,0 +1,86 @@
+﻿<Window x:Class="VRChat_Stalker.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns:local="clr-namespace:VRChat_Stalker"
+        mc:Ignorable="d"
+        Title="Profile" Height="414" Width="310" WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <local:ProfileVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <local:StatusToColorConverter x:Key="status2color"/>
+    </Window.Resources>
+    <StackPanel Orientation="Vertical" DataContext="{Binding User}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <materialDesign:RatingBar VerticalAlignment="Top" HorizontalAlignment="Right"
+                                      Max="3" Grid.Row="0" Grid.Column="2" Margin="1"
+                                      Value="{Binding Star, Mode=TwoWay}"
+                                      ToolTip="Power of stalking.">
+            </materialDesign:RatingBar>
+            <Ellipse Margin="0,20,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                     Height="90" Width="90"
+                     ToolTip="{Binding Id}">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding ImageUrl}" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="10,10"
+                       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center"
+                       Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                       ToolTip="{Binding Name}">
+                
+            </TextBlock>
+        </Grid>
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="6,4">
+            Status
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="12,2">
+            <Ellipse VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
+                     Width="8" Height="8"
+                     Fill="{Binding Status, Converter={StaticResource status2color}}"
+                     ToolTip="{Binding Status}">
+            </Ellipse>
+            <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                    Text="{Binding StatusText}" Margin="4,0"
+                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
+
+            </TextBlock>
+        </StackPanel>
+        
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="6,16,0,0">
+            Memo
+        </TextBlock>
+        <TextBox materialDesign:HintAssist.Hint="Who is it?" Margin="12,2"
+                 MaxLength="2048"
+                 TextWrapping="Wrap" AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 SpellCheck.IsEnabled="True"
+                 VerticalAlignment="Stretch"
+                 Height="120" Background="LightGoldenrodYellow"
+                 VerticalContentAlignment="Top"
+                 Text="{Binding Memo, Mode=TwoWay}"
+                 Padding="1">
+
+        </TextBox>
+    </StackPanel>
+</Window>

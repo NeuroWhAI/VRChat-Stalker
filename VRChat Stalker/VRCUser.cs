@@ -22,6 +22,7 @@ namespace VRChat_Stalker
         public bool IsTracked { get; set; } = false;
         public string ImageUrl { get; set; }
         public string StatusText { get; set; }
+        public string Memo { get; set; } = "";
 
         public UserStatus Status
         {

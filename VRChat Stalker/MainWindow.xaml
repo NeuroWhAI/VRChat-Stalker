@@ -125,7 +125,16 @@
                     </TextBox>
 
                     <ListBox x:Name="listUser" ItemsSource="{Binding UserListView}" HorizontalContentAlignment="Stretch"
-                             Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="4">
+                             Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="4"
+                             MouseDown="listUser_MouseDown">
+                        <ListBox.Resources>
+                            <ContextMenu x:Key="menuUser">
+                                <MenuItem Header="Show details" Click="MenuItem_Details_Click"/>
+                            </ContextMenu>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource menuUser}"/>
+                            </Style>
+                        </ListBox.Resources>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <materialDesign:Card Padding="8">

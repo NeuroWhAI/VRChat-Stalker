@@ -146,5 +146,30 @@ namespace VRChat_Stalker
             this.trayIcon.ShowBalloonTip(5000, e.UserName, e.UserStatus,
                 System.Windows.Forms.ToolTipIcon.Info);
         }
+
+        private void listUser_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.listUser.UnselectAll();
+        }
+
+        private void MenuItem_Details_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.listUser.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var user = this.listUser.SelectedItem as VRCUser;
+
+            if (user == null)
+            {
+                return;
+            }
+
+            var profileWin = new ProfileWindow(Vm.Vrc, user);
+            profileWin.Owner = this;
+            profileWin.ShowDialog();
+            profileWin.Close();
+        }
     }
 }

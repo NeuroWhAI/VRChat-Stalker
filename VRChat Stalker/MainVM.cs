@@ -209,6 +209,7 @@ namespace VRChat_Stalker
                             bw.Write(user.Id);
                             bw.Write(user.Star);
                             bw.Write(user.IsTracked);
+                            bw.Write(user.Memo);
                         }
 
 
@@ -234,6 +235,8 @@ namespace VRChat_Stalker
                 return;
             }
 
+            Version memoVersion = new Version(1, 0, 4, 0);
+
             using (var br = new BinaryReader(new FileStream("users.dat", FileMode.Open)))
             {
                 Version fileVersion = Version.Parse(br.ReadString());
@@ -246,12 +249,19 @@ namespace VRChat_Stalker
                     int star = br.ReadInt32();
                     bool isTracked = br.ReadBoolean();
 
+                    string memo = "";
+                    if (fileVersion >= memoVersion)
+                    {
+                        memo = br.ReadString();
+                    }
+
                     if (m_userIdToIndex.ContainsKey(id))
                     {
                         var user = Users[m_userIdToIndex[id]];
 
                         user.Star = star;
                         user.IsTracked = isTracked;
+                        user.Memo = memo;
                     }
                 }
 
