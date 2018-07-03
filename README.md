@@ -6,4 +6,10 @@ VRChat friends alarm.
 
 ## Screenshots
 
+* Friends list
+
 ![Main](./Res/main.png)
+
+* User profile + Memo
+
+![Profile](./Res/profile.png)
