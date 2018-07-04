@@ -40,6 +40,8 @@ namespace VRChat_Stalker
 
         private NotifyIcon trayIcon = new NotifyIcon();
 
+        private bool m_willExit = false;
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Vm.Init();
@@ -54,10 +56,18 @@ namespace VRChat_Stalker
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            trayIcon.Visible = false;
+            if (this.Visibility == Visibility.Visible && m_willExit == false)
+            {
+                e.Cancel = true;
 
+                this.Hide();
+            }
+            else
+            {
+                trayIcon.Visible = false;
 
-            Vm.Close();
+                Vm.Close();
+            }
         }
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -99,6 +109,7 @@ namespace VRChat_Stalker
             else if (tag == "Exit")
             {
                 // Exit
+                m_willExit = true;
                 this.Close();
                 Application.Current.Shutdown();
             }
