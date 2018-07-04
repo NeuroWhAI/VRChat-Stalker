@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace VRChat_Stalker
 {
@@ -23,6 +24,7 @@ namespace VRChat_Stalker
         public ProfileVM()
         {
             CmdJoin = new CommandHandler((_) => Join());
+            CmdRemoveTag = new CommandHandler((param) => RemoveTag(param as string));
 
 
 #if DEBUG
@@ -35,9 +37,13 @@ namespace VRChat_Stalker
                 Location = "offline",
                 StatusText = "Status TEST Hi ZZ",
                 Permission = UserPermission.Trust | UserPermission.Avatar,
+                Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" }
             };
 #endif
         }
+
+        public ICommand CmdJoin { get; set; }
+        public ICommand CmdRemoveTag { get; set; }
 
         public VRChatApi.VRChatApi Vrc { get; set; }
         private VRCUser m_user = null;
@@ -47,6 +53,9 @@ namespace VRChat_Stalker
             set
             {
                 m_user = value;
+
+                UserTags = new ObservableCollection<string>(value.Tags);
+                OnPropertyChanged("UserTags");
 
                 OnPropertyChanged("User");
                 OnPropertyChanged("CanJoin");
@@ -59,7 +68,6 @@ namespace VRChat_Stalker
         }
 
         public bool CanJoin => User.Status == UserStatus.Online;
-        public ICommand CmdJoin { get; set; }
 
         public string JoinTooltip
         {
@@ -89,6 +97,8 @@ namespace VRChat_Stalker
         public bool HasWorldTag => (User.Permission & UserPermission.World) == UserPermission.World;
         public bool HasLegendTag => (User.Permission & UserPermission.Legend) == UserPermission.Legend;
 
+        public ObservableCollection<string> UserTags { get; set; } = new ObservableCollection<string>();
+
         private void Join()
         {
             string worldId = User.WorldId;
@@ -97,6 +107,35 @@ namespace VRChat_Stalker
             string uri = $"https://vrchat.net/launch?worldId={worldId}&instanceId={instId}";
 
             System.Diagnostics.Process.Start(uri);
+        }
+
+        public bool AddTag(string tag)
+        {
+            if (tag.Length > 32)
+            {
+                return false;
+            }
+
+            tag = tag.ToLowerInvariant();
+
+            bool result = User.Tags.Add(tag);
+
+            if (result)
+            {
+                UserTags.Add(tag);
+            }
+
+            return result;
+        }
+
+        private void RemoveTag(string tag)
+        {
+            if (User.Tags.Contains(tag))
+            {
+                User.Tags.Remove(tag);
+
+                UserTags.Remove(tag);
+            }
         }
     }
 }

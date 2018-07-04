@@ -35,6 +35,7 @@ namespace VRChat_Stalker
         public string Memo { get; set; } = "";
         public List<string> FriendsWith { get; set; } = new List<string>();
         public UserPermission Permission { get; set; } = UserPermission.None;
+        public HashSet<string> Tags { get; set; } = new HashSet<string>();
 
         public UserStatus Status
         {

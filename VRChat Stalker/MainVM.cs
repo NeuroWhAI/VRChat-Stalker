@@ -210,6 +210,12 @@ namespace VRChat_Stalker
                             bw.Write(user.Star);
                             bw.Write(user.IsTracked);
                             bw.Write(user.Memo);
+
+                            bw.Write(user.Tags.Count);
+                            foreach (string tag in user.Tags)
+                            {
+                                bw.Write(tag);
+                            }
                         }
 
 
@@ -236,6 +242,7 @@ namespace VRChat_Stalker
             }
 
             Version memoVersion = new Version(1, 0, 4, 0);
+            Version tagVersion = new Version(1, 0, 5, 0);
 
             using (var br = new BinaryReader(new FileStream("users.dat", FileMode.Open)))
             {
@@ -255,6 +262,12 @@ namespace VRChat_Stalker
                         memo = br.ReadString();
                     }
 
+                    HashSet<string> tags = new HashSet<string>();
+                    if (fileVersion >= tagVersion)
+                    {
+                        tags.Add(br.ReadString());
+                    }
+
                     if (m_userIdToIndex.ContainsKey(id))
                     {
                         var user = Users[m_userIdToIndex[id]];
@@ -262,6 +275,7 @@ namespace VRChat_Stalker
                         user.Star = star;
                         user.IsTracked = isTracked;
                         user.Memo = memo;
+                        user.Tags = tags;
                     }
                 }
 
@@ -455,13 +469,14 @@ namespace VRChat_Stalker
             }
             else
             {
-                filter = filter.ToLowerInvariant();
+                string lower = filter.ToLowerInvariant();
 
                 UserListView.Filter = (obj) =>
                 {
                     if (obj is VRCUser user
-                    && (user.Name.ToLowerInvariant().Contains(filter)
-                    || user.StatusText.ToLowerInvariant().Contains(filter)))
+                    && (user.Name.ToLowerInvariant().Contains(lower)
+                    || user.StatusText.ToLowerInvariant().Contains(lower)
+                    || user.Tags.Contains(filter)))
                     {
                         return true;
                     }
