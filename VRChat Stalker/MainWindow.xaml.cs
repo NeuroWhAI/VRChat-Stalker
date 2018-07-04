@@ -42,6 +42,13 @@ namespace VRChat_Stalker
 
         private bool m_willExit = false;
 
+        private async Task HideAndSave()
+        {
+            this.Hide();
+
+            await Vm.SaveUsers();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Vm.Init();
@@ -54,23 +61,27 @@ namespace VRChat_Stalker
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (this.Visibility == Visibility.Visible && m_willExit == false)
             {
+                // Hide
+
                 e.Cancel = true;
 
-                this.Hide();
+                await HideAndSave();
             }
             else
             {
+                // Exit
+
                 trayIcon.Visible = false;
 
                 Vm.Close();
             }
         }
 
-        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = sender as ListBoxItem;
             string tag = (string)item.Tag;
@@ -104,7 +115,7 @@ namespace VRChat_Stalker
             else if (tag == "Hide")
             {
                 // Hide
-                this.Hide();
+                await this.HideAndSave();
             }
             else if (tag == "Exit")
             {
@@ -171,12 +182,13 @@ namespace VRChat_Stalker
             this.listUser.UnselectAll();
         }
 
-        private void MenuItem_Details_Click(object sender, RoutedEventArgs e)
+        private async void MenuItem_Details_Click(object sender, RoutedEventArgs e)
         {
             if (this.listUser.SelectedIndex < 0)
             {
                 return;
             }
+
 
             var user = this.listUser.SelectedItem as VRCUser;
 
@@ -189,6 +201,9 @@ namespace VRChat_Stalker
             profileWin.Owner = this;
             profileWin.ShowDialog();
             profileWin.Close();
+
+            
+            await Vm.SaveUsers();
         }
     }
 }

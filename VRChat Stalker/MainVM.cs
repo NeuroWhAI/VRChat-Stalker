@@ -192,7 +192,7 @@ namespace VRChat_Stalker
             return latestVersion > thisVersion;
         }
 
-        private Task SaveUsers()
+        public Task SaveUsers()
         {
             return Task.Factory.StartNew(()=>
             {
@@ -265,7 +265,12 @@ namespace VRChat_Stalker
                     HashSet<string> tags = new HashSet<string>();
                     if (fileVersion >= tagVersion)
                     {
-                        tags.Add(br.ReadString());
+                        int count = br.ReadInt32();
+
+                        for (int t = 0; t < count; ++t)
+                        {
+                            tags.Add(br.ReadString());
+                        }
                     }
 
                     if (m_userIdToIndex.ContainsKey(id))
@@ -450,9 +455,6 @@ namespace VRChat_Stalker
                     }
                 }
             }
-
-
-            await SaveUsers();
 
 
             m_checkTimer.Start();
