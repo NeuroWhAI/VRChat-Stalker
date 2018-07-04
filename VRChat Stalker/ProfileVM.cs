@@ -34,6 +34,7 @@ namespace VRChat_Stalker
                 Star = 2,
                 Location = "offline",
                 StatusText = "Status TEST Hi ZZ",
+                Permission = UserPermission.Trust | UserPermission.Avatar,
             };
 #endif
         }
@@ -50,6 +51,10 @@ namespace VRChat_Stalker
                 OnPropertyChanged("User");
                 OnPropertyChanged("CanJoin");
                 OnPropertyChanged("JoinTooltip");
+                OnPropertyChanged("IsTrusted");
+                OnPropertyChanged("HasAvatarTag");
+                OnPropertyChanged("HasWorldTag");
+                OnPropertyChanged("HasLegendTag");
             }
         }
 
@@ -78,6 +83,11 @@ namespace VRChat_Stalker
                 return buffer.ToString();
             }
         }
+
+        public bool IsTrusted => (User.Permission & UserPermission.Trust) == UserPermission.Trust;
+        public bool HasAvatarTag => (User.Permission & UserPermission.Avatar) == UserPermission.Avatar;
+        public bool HasWorldTag => (User.Permission & UserPermission.World) == UserPermission.World;
+        public bool HasLegendTag => (User.Permission & UserPermission.Legend) == UserPermission.Legend;
 
         private void Join()
         {

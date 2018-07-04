@@ -391,6 +391,12 @@ namespace VRChat_Stalker
                                 // Alarm image changed.
                                 OnUserChanged(user.ImageUrl, user.Name, "Avatar changed");
                             }
+
+                            if (target.Permission != user.Permission)
+                            {
+                                // Alarm permission changed.
+                                OnUserChanged(user.ImageUrl, user.Name, "Permission changed");
+                            }
                         }
                     }
 
@@ -419,6 +425,7 @@ namespace VRChat_Stalker
                     }
 
                     target.FriendsWith = user.FriendsWith;
+                    target.Permission = user.Permission;
 
 
                     if (changed)
@@ -576,6 +583,26 @@ namespace VRChat_Stalker
                         Location = res.location,
                         ImageUrl = res.currentAvatarThumbnailImageUrl,
                     };
+
+                    foreach (string tag in res.tags)
+                    {
+                        if (tag.Contains("legend"))
+                        {
+                            user.Permission |= UserPermission.Legend;
+                        }
+                        else if (tag.Contains("avatar"))
+                        {
+                            user.Permission |= UserPermission.Avatar;
+                        }
+                        else if (tag.Contains("world"))
+                        {
+                            user.Permission |= UserPermission.World;
+                        }
+                        else if (tag.Contains("trust"))
+                        {
+                            user.Permission |= UserPermission.Trust;
+                        }
+                    }
 
                     await ConvertLocation(user);
 

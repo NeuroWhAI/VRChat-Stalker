@@ -13,6 +13,16 @@ namespace VRChat_Stalker
         Offline,
     }
 
+    [Flags]
+    public enum UserPermission
+    {
+        None = 0,
+        Trust = 1,
+        Avatar = 1 << 1,
+        World = 1 << 2,
+        Legend = 1 << 3,
+    }
+
     public class VRCUser
     {
         public string Id { get; set; }
@@ -24,6 +34,7 @@ namespace VRChat_Stalker
         public string StatusText { get; set; }
         public string Memo { get; set; } = "";
         public List<string> FriendsWith { get; set; } = new List<string>();
+        public UserPermission Permission { get; set; } = UserPermission.None;
 
         public UserStatus Status
         {

@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BooleanToPermissonColorConverter.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="ProfileVM.cs" />
     <Compile Include="ProfileWindow.xaml.cs">
