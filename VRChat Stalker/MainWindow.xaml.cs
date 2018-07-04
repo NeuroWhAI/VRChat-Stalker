@@ -121,10 +121,18 @@ namespace VRChat_Stalker
 
         private void ShowDownloadAlarm()
         {
-            this.snackBar.MessageQueue.Enqueue("New version detected!", "DOWNLOAD", () =>
+            if (this.Visibility == Visibility.Visible)
             {
-                System.Diagnostics.Process.Start(@"http://neurowhai.tistory.com/202");
-            });
+                this.snackBar.MessageQueue.Enqueue("New version detected!", "DOWNLOAD", () =>
+                {
+                    System.Diagnostics.Process.Start(@"http://neurowhai.tistory.com/202");
+                });
+            }
+            else
+            {
+                this.trayIcon.ShowBalloonTip(5000, "VRChat Stalker", "New version detected!",
+                    System.Windows.Forms.ToolTipIcon.Info);
+            }
         }
 
         private void Button_Sort_Name_Click(object sender, RoutedEventArgs e)
