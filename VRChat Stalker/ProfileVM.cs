@@ -49,12 +49,35 @@ namespace VRChat_Stalker
 
                 OnPropertyChanged("User");
                 OnPropertyChanged("CanJoin");
+                OnPropertyChanged("JoinTooltip");
             }
         }
 
         public bool CanJoin => User.Status == UserStatus.Online;
-
         public ICommand CmdJoin { get; set; }
+
+        public string JoinTooltip
+        {
+            get
+            {
+                if (User.FriendsWith.Count <= 0)
+                {
+                    return User.InstanceId;
+                }
+
+                var buffer = new StringBuilder("With my friends: ");
+
+                foreach (string friend in User.FriendsWith.Skip(1))
+                {
+                    buffer.Append(friend);
+                    buffer.Append(", ");
+                }
+
+                buffer.Append(User.FriendsWith.Last());
+
+                return buffer.ToString();
+            }
+        }
 
         private void Join()
         {

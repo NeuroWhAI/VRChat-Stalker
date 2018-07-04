@@ -23,6 +23,7 @@ namespace VRChat_Stalker
         public string ImageUrl { get; set; }
         public string StatusText { get; set; }
         public string Memo { get; set; } = "";
+        public List<string> FriendsWith { get; set; } = new List<string>();
 
         public UserStatus Status
         {

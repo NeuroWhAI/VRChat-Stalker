@@ -72,7 +72,8 @@
             </TextBlock>
             <Button Height="Auto" VerticalAlignment="Center" Margin="8,0"
                     Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
-                    Command="{Binding CmdJoin}">
+                    Command="{Binding CmdJoin}"
+                    ToolTip="{Binding JoinTooltip}">
                 Join
             </Button>
         </StackPanel>

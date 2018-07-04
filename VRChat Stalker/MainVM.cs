@@ -323,6 +323,7 @@ namespace VRChat_Stalker
                 {
                     user.Location = "offline";
                     user.StatusText = "Offline";
+                    user.FriendsWith.Clear();
 
                     // Refresh
                     Users.RemoveAt(i);
@@ -417,6 +418,8 @@ namespace VRChat_Stalker
                         changed = true;
                     }
 
+                    target.FriendsWith = user.FriendsWith;
+
 
                     if (changed)
                     {
@@ -484,15 +487,18 @@ namespace VRChat_Stalker
             UserListView.SortDescriptions.Add(m_sortDesc);
         }
 
-        private async Task<string> ConvertLocation(string location, string userId)
+        private async Task ConvertLocation(VRCUser user)
         {
+            string location = user.Location;
+            string userId = user.Id;
+
             if (location == "offline")
             {
-                return "Offline";
+                user.StatusText = "Offline";
             }
             else if (location == "private")
             {
-                return "Private";
+                user.StatusText = "Private";
             }
             else if (location.Contains(':'))
             {
@@ -500,7 +506,7 @@ namespace VRChat_Stalker
 
                 if (loc[1] == userId)
                 {
-                    return "Private";
+                    user.StatusText = "Private";
                 }
                 else
                 {
@@ -515,18 +521,22 @@ namespace VRChat_Stalker
 
                         if (instance != null && instance.users != null)
                         {
-                            return string.Format("{0} ({1}/{2})", world.name,
+                            user.StatusText = string.Format("{0} ({1}/{2})", world.name,
                                 instance.users.Count, world.capacity);
+
+                            // 같은 인스턴스에 있으면서 나랑도 친구인 사람을 목록화.
+                            user.FriendsWith = instance.users
+                                .Where(u => m_userIdToIndex.ContainsKey(u.id) && u.id != userId)
+                                .Select(u => u.displayName)
+                                .ToList();
                         }
                         else
                         {
-                            return world.name;
+                            user.StatusText = world.name;
                         }
                     }
                 }
             }
-
-            return location;
         }
 
         public async Task<List<VRCUser>> GetFriends(bool isOffline)
@@ -567,7 +577,7 @@ namespace VRChat_Stalker
                         ImageUrl = res.currentAvatarThumbnailImageUrl,
                     };
 
-                    user.StatusText = await ConvertLocation(res.location, res.id);
+                    await ConvertLocation(user);
 
                     users.Add(user);
                 }
