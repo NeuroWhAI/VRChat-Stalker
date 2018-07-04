@@ -13,9 +13,9 @@ namespace VRChatApi.Classes
         public string id { get; set; }
         public string name { get; set; }
         [JsonProperty(PropertyName = "private")]
-        public List<string> privateUsers { get; set; }
-        public List<string> friends { get; set; }
-        public List<string> users { get; set; }
+        public List<WorldInstanceUserResponse> privateUsers { get; set; }
+        public List<WorldInstanceUserResponse> friends { get; set; }
+        public List<WorldInstanceUserResponse> users { get; set; }
         public string hidden { get; set; }
         public string nonce { get; set; }
     }

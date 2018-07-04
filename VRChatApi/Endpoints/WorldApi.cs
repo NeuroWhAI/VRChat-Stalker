@@ -136,11 +136,11 @@ namespace VRChatApi.Endpoints
                     id = json["id"].ToString(),
                     name = json["name"].ToString(),
                     privateUsers = (json["private"] is JArray)
-                        ? json["private"].Select(tk => tk.ToString()).ToList() : null,
+                        ? json["private"].Select(tk => tk.ToObject<WorldInstanceUserResponse>()).ToList() : null,
                     friends = (json["friends"] is JArray)
-                        ? json["friends"].Select(tk => tk.ToString()).ToList() : null,
+                        ? json["friends"].Select(tk => tk.ToObject<WorldInstanceUserResponse>()).ToList() : null,
                     users = (json["users"] is JArray)
-                        ? json["users"].Select(tk => tk.ToString()).ToList() : null,
+                        ? json["users"].Select(tk => tk.ToObject<WorldInstanceUserResponse>()).ToList() : null,
                     hidden = (json["hidden"] == null || json["hidden"].Type == JTokenType.Null) ? null : json["hidden"].ToString(),
                     nonce = (json["nonce"] == null) ? null : json["nonce"].ToString(),
                 };

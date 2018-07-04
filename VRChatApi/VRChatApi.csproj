@@ -55,6 +55,7 @@
     <Compile Include="Classes\UserBriefResponse.cs" />
     <Compile Include="Classes\UserResponse.cs" />
     <Compile Include="Classes\WorldInstanceResponse.cs" />
+    <Compile Include="Classes\WorldInstanceUserResponse.cs" />
     <Compile Include="Classes\WorldMetadataResponse.cs" />
     <Compile Include="Classes\WorldResponse.cs" />
     <Compile Include="Endpoints\FriendsApi.cs" />
