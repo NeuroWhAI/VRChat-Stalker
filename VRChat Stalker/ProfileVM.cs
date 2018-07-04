@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace VRChat_Stalker
 {
@@ -21,6 +22,9 @@ namespace VRChat_Stalker
 
         public ProfileVM()
         {
+            CmdJoin = new CommandHandler((_) => Join());
+
+
 #if DEBUG
             User = new VRCUser()
             {
@@ -42,8 +46,24 @@ namespace VRChat_Stalker
             set
             {
                 m_user = value;
+
                 OnPropertyChanged("User");
+                OnPropertyChanged("CanJoin");
             }
+        }
+
+        public bool CanJoin => User.Status == UserStatus.Online;
+
+        public ICommand CmdJoin { get; set; }
+
+        private void Join()
+        {
+            string worldId = User.WorldId;
+            string instId = User.InstanceId;
+
+            string uri = $"https://vrchat.net/launch?worldId={worldId}&instanceId={instId}";
+
+            System.Diagnostics.Process.Start(uri);
         }
     }
 }

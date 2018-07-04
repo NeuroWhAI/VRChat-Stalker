@@ -19,8 +19,9 @@
     </Window.DataContext>
     <Window.Resources>
         <local:StatusToColorConverter x:Key="status2color"/>
+        <BooleanToVisibilityConverter x:Key="bool2visible"/>
     </Window.Resources>
-    <StackPanel Orientation="Vertical" DataContext="{Binding User}">
+    <StackPanel Orientation="Vertical">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -32,19 +33,22 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <materialDesign:RatingBar VerticalAlignment="Top" HorizontalAlignment="Right"
+            <materialDesign:RatingBar DataContext="{Binding User}"
+                                      VerticalAlignment="Top" HorizontalAlignment="Right"
                                       Max="3" Grid.Row="0" Grid.Column="2" Margin="1"
                                       Value="{Binding Star, Mode=TwoWay}"
                                       ToolTip="Power of stalking.">
             </materialDesign:RatingBar>
-            <Ellipse Margin="0,20,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+            <Ellipse DataContext="{Binding User}"
+                     Margin="0,20,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                      Height="90" Width="90"
                      ToolTip="{Binding Id}">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="{Binding ImageUrl}" Stretch="UniformToFill"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="10,10"
+            <TextBlock DataContext="{Binding User}"
+                       Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="10,10"
                        Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center"
                        Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                        ToolTip="{Binding Name}">
@@ -55,22 +59,29 @@
             Status
         </TextBlock>
         <StackPanel Orientation="Horizontal" Margin="12,2">
-            <Ellipse VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
+            <Ellipse DataContext="{Binding User}"
+                     VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
                      Width="8" Height="8"
                      Fill="{Binding Status, Converter={StaticResource status2color}}"
                      ToolTip="{Binding Status}">
             </Ellipse>
-            <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}"
-                    Text="{Binding StatusText}" Margin="4,0"
-                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
-
+            <TextBlock DataContext="{Binding User}"
+                       Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                       Text="{Binding StatusText}" Margin="4,0" VerticalAlignment="Center"
+                       TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
             </TextBlock>
+            <Button Height="Auto" VerticalAlignment="Center" Margin="8,0"
+                    Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
+                    Command="{Binding CmdJoin}">
+                Join
+            </Button>
         </StackPanel>
         
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="6,16,0,0">
             Memo
         </TextBlock>
-        <TextBox materialDesign:HintAssist.Hint="Who is it?" Margin="12,2"
+        <TextBox DataContext="{Binding User}"
+                 materialDesign:HintAssist.Hint="Who is it?" Margin="12,2"
                  MaxLength="2048"
                  TextWrapping="Wrap" AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
