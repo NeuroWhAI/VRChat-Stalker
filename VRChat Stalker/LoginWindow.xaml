@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="125"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Grid.Column="0" IsChecked="{Binding AutoLogin}">자동 로그인</CheckBox>
+            <CheckBox Grid.Column="0" IsChecked="{Binding AutoLogin}">Auto-Login</CheckBox>
             <Button IsDefault="True" Click="Button_Click"
                     x:Name="btnLogin" Style="{DynamicResource MaterialDesignRaisedLightButton}" Grid.Column="1">
                 <Grid>
