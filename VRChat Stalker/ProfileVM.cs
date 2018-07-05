@@ -34,8 +34,8 @@ namespace VRChat_Stalker
                 Name = "TEST NameLongLongHi",
                 ImageUrl = @"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
                 Star = 2,
-                Location = "offline",
-                StatusText = "Status TEST Hi ZZ",
+                Location = "online",
+                StatusText = "Status TEST Hi ZZfefefefefefefefFafaMamaThx",
                 Permission = UserPermission.Trust | UserPermission.Avatar,
                 Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" }
             };

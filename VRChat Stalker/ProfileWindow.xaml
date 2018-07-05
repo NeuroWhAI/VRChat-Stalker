@@ -147,25 +147,30 @@
             <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="6,4">
                 Status
             </TextBlock>
-            <StackPanel Orientation="Horizontal" Margin="12,2">
+            <Grid Margin="12,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 <Ellipse DataContext="{Binding User}"
-                            VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
+                            Grid.Column="0"
                             Width="8" Height="8"
                             Fill="{Binding Status, Converter={StaticResource status2color}}"
                             ToolTip="{Binding Status}">
                 </Ellipse>
-                <TextBlock DataContext="{Binding User}"
+                <TextBlock DataContext="{Binding User}" Grid.Column="1"
                             Style="{DynamicResource MaterialDesignBody2TextBlock}"
                             Text="{Binding StatusText}" Margin="4,0" VerticalAlignment="Center"
                             TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
                 </TextBlock>
-                <Button Height="Auto" VerticalAlignment="Center" Margin="8,0"
+                <Button Height="Auto" VerticalAlignment="Center" Margin="8,0" Grid.Column="2"
                         Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
                         Command="{Binding CmdJoin}"
                         ToolTip="{Binding JoinTooltip}">
                     Join
                 </Button>
-            </StackPanel>
+            </Grid>
 
             <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="6,16,0,0">
                 Memo
