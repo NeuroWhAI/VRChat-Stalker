@@ -103,10 +103,12 @@ namespace VRChat_Stalker
             else if (tag == "Option")
             {
                 // Option
-                var optionWin = new OptionWindow();
+                var optionWin = new OptionWindow(Vm.Option);
                 optionWin.Owner = this;
                 optionWin.ShowDialog();
                 optionWin.Close();
+
+                Vm.UpdateOption();
             }
             else if (tag == "Update")
             {

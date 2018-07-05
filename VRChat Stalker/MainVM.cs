@@ -65,11 +65,14 @@ namespace VRChat_Stalker
 
                 UserChanged += (_) =>
                   {
-                      m_mediaAlarm.Dispatcher.Invoke(() =>
+                      if (Option.PlaySound)
                       {
-                          m_mediaAlarm.Stop();
-                          m_mediaAlarm.Play();
-                      });
+                          m_mediaAlarm.Dispatcher.Invoke(() =>
+                          {
+                              m_mediaAlarm.Stop();
+                              m_mediaAlarm.Play();
+                          });
+                      }
                   };
             }
 
@@ -90,6 +93,8 @@ namespace VRChat_Stalker
                 OnPropertyChanged("OnLoading");
             }
         }
+
+        public ProgramOption Option { get; set; } = new ProgramOption();
 
         public ObservableCollection<VRCUser> Users { get; set; } = new ObservableCollection<VRCUser>();
         public ListCollectionView UserListView { get; set; }
@@ -121,6 +126,8 @@ namespace VRChat_Stalker
         {
             OnLoading = true;
 
+            Option.Load();
+
             Users = await GetAllFriends();
 
             foreach (int i in Enumerable.Range(0, Users.Count))
@@ -137,9 +144,14 @@ namespace VRChat_Stalker
 
             m_checkTimer.Stop();
             m_checkTimer = new DispatcherTimer();
-            m_checkTimer.Interval = TimeSpan.FromSeconds(8);
+            m_checkTimer.Interval = TimeSpan.FromSeconds(Option.UpdateCycle);
             m_checkTimer.Tick += CheckTimer_Tick;
             m_checkTimer.Start();
+        }
+
+        public void UpdateOption()
+        {
+            m_checkTimer.Interval = TimeSpan.FromSeconds(Option.UpdateCycle);
         }
 
         public void Close()

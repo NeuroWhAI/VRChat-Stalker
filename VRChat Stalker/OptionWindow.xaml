@@ -14,20 +14,25 @@
         xmlns:local="clr-namespace:VRChat_Stalker"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Option" Height="450" Width="340" ResizeMode="CanMinimize">
+        Title="Option" Height="240" Width="340" ResizeMode="CanMinimize"
+        Closing="Window_Closing">
     <Window.DataContext>
-        <local:LoginVM/>
+        <local:OptionVM/>
     </Window.DataContext>
     <StackPanel Orientation="Vertical" Margin="6">
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,4">
             Program
         </TextBlock>
-        <CheckBox Margin="6,2">Start when Windows starts</CheckBox>
+        <CheckBox Margin="6,2" IsChecked="{Binding StartWhenBoot, Mode=TwoWay}">
+            Start when Windows starts
+        </CheckBox>
 
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,14,0,4">
             Alarm
         </TextBlock>
-        <CheckBox Margin="6,2">Play sound</CheckBox>
+        <CheckBox Margin="6,2" IsChecked="{Binding PlaySound, Mode=TwoWay}">
+            Play sound
+        </CheckBox>
 
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,14,0,4">
             Stalking
@@ -37,7 +42,10 @@
                 Update cycle(s) :
             </TextBlock>
             <Slider Minimum="4" Maximum="60" Style="{StaticResource MaterialDesignSlider}"
-                    Width="100" Margin="8,0" />
+                    Width="100" Margin="8,0" Value="{Binding UpdateCycle, Mode=TwoWay}" />
+            <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"
+                       Text="{Binding UpdateCycleText}">
+            </TextBlock>
         </StackPanel>
     </StackPanel>
 </Window>

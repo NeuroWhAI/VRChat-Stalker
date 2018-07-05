@@ -19,9 +19,20 @@ namespace VRChat_Stalker
     /// </summary>
     public partial class OptionWindow : Window
     {
-        public OptionWindow()
+        public OptionWindow(ProgramOption option)
         {
             InitializeComponent();
+
+
+            Vm = this.DataContext as OptionVM;
+            Vm.Option = option;
+        }
+
+        private OptionVM Vm { get; set; }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Vm.Close();
         }
     }
 }
