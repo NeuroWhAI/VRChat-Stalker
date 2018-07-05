@@ -241,51 +241,60 @@ namespace VRChat_Stalker
                 return;
             }
 
-            Version memoVersion = new Version(1, 0, 4, 0);
-            Version tagVersion = new Version(1, 0, 5, 0);
-
-            using (var br = new BinaryReader(new FileStream("users.dat", FileMode.Open)))
+            try
             {
-                Version fileVersion = Version.Parse(br.ReadString());
+                Version memoVersion = new Version(1, 0, 4, 0);
+                Version tagVersion = new Version(1, 0, 5, 0);
 
-                int usrCnt = br.ReadInt32();
-
-                for (int i = 0; i < usrCnt; ++i)
+                using (var br = new BinaryReader(new FileStream("users.dat", FileMode.Open)))
                 {
-                    string id = br.ReadString();
-                    int star = br.ReadInt32();
-                    bool isTracked = br.ReadBoolean();
+                    Version fileVersion = Version.Parse(br.ReadString());
 
-                    string memo = "";
-                    if (fileVersion >= memoVersion)
+                    int usrCnt = br.ReadInt32();
+
+                    for (int i = 0; i < usrCnt; ++i)
                     {
-                        memo = br.ReadString();
-                    }
+                        string id = br.ReadString();
+                        int star = br.ReadInt32();
+                        bool isTracked = br.ReadBoolean();
 
-                    HashSet<string> tags = new HashSet<string>();
-                    if (fileVersion >= tagVersion)
-                    {
-                        int count = br.ReadInt32();
-
-                        for (int t = 0; t < count; ++t)
+                        string memo = "";
+                        if (fileVersion >= memoVersion)
                         {
-                            tags.Add(br.ReadString());
+                            memo = br.ReadString();
+                        }
+
+                        HashSet<string> tags = new HashSet<string>();
+                        if (fileVersion >= tagVersion)
+                        {
+                            int count = br.ReadInt32();
+
+                            for (int t = 0; t < count; ++t)
+                            {
+                                tags.Add(br.ReadString());
+                            }
+                        }
+
+                        if (m_userIdToIndex.ContainsKey(id))
+                        {
+                            var user = Users[m_userIdToIndex[id]];
+
+                            user.Star = star;
+                            user.IsTracked = isTracked;
+                            user.Memo = memo;
+                            user.Tags = tags;
                         }
                     }
 
-                    if (m_userIdToIndex.ContainsKey(id))
-                    {
-                        var user = Users[m_userIdToIndex[id]];
 
-                        user.Star = star;
-                        user.IsTracked = isTracked;
-                        user.Memo = memo;
-                        user.Tags = tags;
-                    }
+                    br.Close();
                 }
-
-
-                br.Close();
+            }
+            catch (Exception)
+            {
+#if DEBUG
+                throw;
+#endif
             }
 
 

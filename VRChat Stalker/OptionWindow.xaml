@@ -14,11 +14,30 @@
         xmlns:local="clr-namespace:VRChat_Stalker"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="OptionWindow" Height="450" Width="420" ResizeMode="CanMinimize">
+        Title="Option" Height="450" Width="340" ResizeMode="CanMinimize">
     <Window.DataContext>
         <local:LoginVM/>
     </Window.DataContext>
-    <Grid>
-        
-    </Grid>
+    <StackPanel Orientation="Vertical" Margin="6">
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,4">
+            Program
+        </TextBlock>
+        <CheckBox Margin="6,2">Start when Windows starts</CheckBox>
+
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,14,0,4">
+            Alarm
+        </TextBlock>
+        <CheckBox Margin="6,2">Play sound</CheckBox>
+
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,14,0,4">
+            Stalking
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="6,2,0,2">
+            <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center">
+                Update cycle(s) :
+            </TextBlock>
+            <Slider Minimum="4" Maximum="60" Style="{StaticResource MaterialDesignSlider}"
+                    Width="100" Margin="8,0" />
+        </StackPanel>
+    </StackPanel>
 </Window>

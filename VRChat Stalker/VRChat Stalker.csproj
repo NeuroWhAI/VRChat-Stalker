@@ -76,6 +76,7 @@
     <Compile Include="ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProgramOption.cs" />
     <Compile Include="SortTypes.cs" />
     <Compile Include="StatusToColorConverter.cs" />
     <Compile Include="VRCUser.cs" />
