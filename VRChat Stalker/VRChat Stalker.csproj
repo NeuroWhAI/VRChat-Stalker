@@ -68,6 +68,10 @@
     </ApplicationDefinition>
     <Compile Include="BooleanToPermissonColorConverter.cs" />
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="OptionVM.cs" />
+    <Compile Include="OptionWindow.xaml.cs">
+      <DependentUpon>OptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProfileVM.cs" />
     <Compile Include="ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
@@ -90,6 +94,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

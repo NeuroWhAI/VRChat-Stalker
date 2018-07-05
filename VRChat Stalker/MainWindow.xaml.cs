@@ -86,6 +86,11 @@ namespace VRChat_Stalker
             var item = sender as ListBoxItem;
             string tag = (string)item.Tag;
 
+
+            // Close side menu.
+            this.btnToggleMenu.IsChecked = false;
+
+
             if (tag == "Logout")
             {
                 // Logout
@@ -98,7 +103,10 @@ namespace VRChat_Stalker
             else if (tag == "Option")
             {
                 // Option
-
+                var optionWin = new OptionWindow();
+                optionWin.Owner = this;
+                optionWin.ShowDialog();
+                optionWin.Close();
             }
             else if (tag == "Update")
             {
@@ -124,10 +132,6 @@ namespace VRChat_Stalker
                 this.Close();
                 Application.Current.Shutdown();
             }
-
-
-            // Close side menu.
-            this.btnToggleMenu.IsChecked = false;
         }
 
         private void ShowDownloadAlarm()
