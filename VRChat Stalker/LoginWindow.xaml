@@ -13,7 +13,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         xmlns:local="clr-namespace:VRChat_Stalker"
         mc:Ignorable="d"
-        Title="VRChat Stalker" Height="241.396" Width="320" ResizeMode="CanMinimize"
+        Title="VRChat Stalker" Height="241" Width="320" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Window.DataContext>
