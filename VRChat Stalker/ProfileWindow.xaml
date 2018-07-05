@@ -160,9 +160,10 @@
                             ToolTip="{Binding Status}">
                 </Ellipse>
                 <TextBlock DataContext="{Binding User}" Grid.Column="1"
-                            Style="{DynamicResource MaterialDesignBody2TextBlock}"
-                            Text="{Binding StatusText}" Margin="4,0" VerticalAlignment="Center"
-                            TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
+                           Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                           Text="{Binding StatusText}" Margin="4,0" VerticalAlignment="Center"
+                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                           ToolTip="{Binding StatusText}">
                 </TextBlock>
                 <Button Height="Auto" VerticalAlignment="Center" Margin="8,0" Grid.Column="2"
                         Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
