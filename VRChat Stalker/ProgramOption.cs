@@ -4,12 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Win32;
 
 namespace VRChat_Stalker
 {
     public class ProgramOption
     {
-        public bool StartWhenBoot { get; set; } = false;
+        private bool m_startWhenBoot = false;
+        public bool StartWhenBoot
+        {
+            get => m_startWhenBoot;
+            set
+            {
+                try
+                {
+                    RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+
+                    if (value)
+                    {
+                        key.SetValue("VRChat Stalker", System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    }
+                    else
+                    {
+                        key.DeleteValue("VRChat Stalker", false);
+                    }
+
+                    m_startWhenBoot = value;
+                }
+                catch (Exception)
+                {
+#if DEBUG
+                    throw;
+#endif
+                }
+            }
+        }
+
         public bool PlaySound { get; set; } = true;
         public int UpdateCycle { get; set; } = 8;
 
