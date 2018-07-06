@@ -75,13 +75,15 @@
                 <Ellipse DataContext="{Binding User}"
                             Margin="0,20,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                             Height="90" Width="90"
-                            ToolTip="{Binding Id}">
+                            ToolTip="{Binding Id}"
+                         Stroke="{Binding Status, Converter={StaticResource status2color}}"
+                         StrokeThickness="4">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding ImageUrl}" Stretch="UniformToFill"/>
                     </Ellipse.Fill>
                 </Ellipse>
                 <TextBlock DataContext="{Binding User}"
-                            Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="10,10,10,2"
+                            Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="10,6,10,4"
                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center"
                             Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                             ToolTip="{Binding Name}">
@@ -121,7 +123,8 @@
                             Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
                         <Viewbox Width="30" Height="18">
                             <Canvas Width="24" Height="24">
-                                <Path Data="M21.41,11.58L12.41,2.58C12.04,2.21 11.53,2 11,2H4A2,2 0 0,0 2,4V11C2,11.53 2.21,12.04 2.59,12.41L3,12.81C3.9,12.27 4.94,12 6,12A6,6 0 0,1 12,18C12,19.06 11.72,20.09 11.18,21L11.58,21.4C11.95,21.78 12.47,22 13,22C13.53,22 14.04,21.79 14.41,21.41L21.41,14.41C21.79,14.04 22,13.53 22,13C22,12.47 21.79,11.96 21.41,11.58M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M10,19H7V22H5V19H2V17H5V14H7V17H10V19Z" Fill="Black" />
+                                <Path Data="M21.41,11.58L12.41,2.58C12.04,2.21 11.53,2 11,2H4A2,2 0 0,0 2,4V11C2,11.53 2.21,12.04 2.59,12.41L3,12.81C3.9,12.27 4.94,12 6,12A6,6 0 0,1 12,18C12,19.06 11.72,20.09 11.18,21L11.58,21.4C11.95,21.78 12.47,22 13,22C13.53,22 14.04,21.79 14.41,21.41L21.41,14.41C21.79,14.04 22,13.53 22,13C22,12.47 21.79,11.96 21.41,11.58M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M10,19H7V22H5V19H2V17H5V14H7V17H10V19Z"
+                                      Fill="White" />
                             </Canvas>
                         </Viewbox>
                     </Button>
@@ -152,6 +155,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Ellipse DataContext="{Binding User}"
                             Grid.Column="0"
@@ -165,7 +169,13 @@
                            TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                            ToolTip="{Binding StatusText}">
                 </TextBlock>
-                <Button Height="Auto" VerticalAlignment="Center" Margin="8,0" Grid.Column="2"
+                <TextBlock DataContext="{Binding User}" Grid.Column="2"
+                           Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                           Text="{Binding InstanceOccupant}" Margin="2,0" VerticalAlignment="Center"
+                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                           ToolTip="{Binding InstanceOccupant}" FontSize="10">
+                </TextBlock>
+                <Button Height="Auto" VerticalAlignment="Center" Margin="4,0" Grid.Column="3"
                         Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
                         Command="{Binding CmdJoin}"
                         ToolTip="{Binding JoinTooltip}">

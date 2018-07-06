@@ -37,7 +37,8 @@ namespace VRChat_Stalker
                 Location = "online",
                 StatusText = "Status TEST Hi ZZfefefefefefefefFafaMamaThx",
                 Permission = UserPermission.Trust | UserPermission.Avatar,
-                Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" }
+                Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" },
+                InstanceOccupant = "(22/20)",
             };
 #endif
         }
@@ -75,18 +76,24 @@ namespace VRChat_Stalker
             {
                 if (User.FriendsWith.Count <= 0)
                 {
-                    return User.InstanceId;
+                    return User.InstanceNumber;
                 }
 
-                var buffer = new StringBuilder("With my friends: ");
+                var buffer = new StringBuilder(User.InstanceNumber);
 
-                foreach (string friend in User.FriendsWith.Skip(1))
+                if (User.FriendsWith.Count > 0)
                 {
-                    buffer.Append(friend);
-                    buffer.Append(", ");
-                }
+                    buffer.AppendLine();
+                    buffer.Append("With my friends: ");
 
-                buffer.Append(User.FriendsWith.Last());
+                    foreach (string friend in User.FriendsWith.Skip(1))
+                    {
+                        buffer.Append(friend);
+                        buffer.Append(", ");
+                    }
+
+                    buffer.Append(User.FriendsWith.Last());
+                }
 
                 return buffer.ToString();
             }

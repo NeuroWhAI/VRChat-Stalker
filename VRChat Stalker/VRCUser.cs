@@ -32,6 +32,7 @@ namespace VRChat_Stalker
         public bool IsTracked { get; set; } = false;
         public string ImageUrl { get; set; }
         public string StatusText { get; set; }
+        public string InstanceOccupant { get; set; }
         public string Memo { get; set; } = "";
         public List<string> FriendsWith { get; set; } = new List<string>();
         public UserPermission Permission { get; set; } = UserPermission.None;
@@ -83,6 +84,19 @@ namespace VRChat_Stalker
                 if (Location.Contains(':'))
                 {
                     return Location.Split(':')[1];
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string InstanceNumber
+        {
+            get
+            {
+                if (Location.Contains(':'))
+                {
+                    return "#" + Location.Split(':')[1].Split('~')[0];
                 }
 
                 return string.Empty;

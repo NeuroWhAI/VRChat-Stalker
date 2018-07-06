@@ -15,7 +15,7 @@ namespace VRChat_Stalker
         {
             if (value is bool && (bool)value)
             {
-                return Brushes.Black;
+                return Brushes.GreenYellow;
             }
 
             return Brushes.LightGray;

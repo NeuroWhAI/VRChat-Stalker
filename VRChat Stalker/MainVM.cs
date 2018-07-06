@@ -41,11 +41,23 @@ namespace VRChat_Stalker
             // TEST
             Users.Add(new VRCUser()
             {
+                IsTracked = true,
                 Id = "test-user",
-                Location = "offline",
-                StatusText = "LongtextLongtextLongte",
+                Location = "Korea:12345~nonce(123)~test(456)",
+                StatusText = "LongtextLongtextLongtextLongText",
                 ImageUrl = "http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
                 Name = "TEST User 바나나사과파인애플",
+                InstanceOccupant = "(7/20)",
+            });
+            Users.Add(new VRCUser()
+            {
+                IsTracked = true,
+                Id = "test-useruser",
+                Location = "Korea:12345~nonce(123)~test(456)",
+                StatusText = "Korea",
+                ImageUrl = "http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
+                Name = "TEST User123",
+                InstanceOccupant = "(0/20)",
             });
             Users.Add(new VRCUser()
             {
@@ -463,6 +475,11 @@ namespace VRChat_Stalker
                         target.StatusText = user.StatusText;
                         changed = true;
                     }
+                    if (target.InstanceOccupant != user.InstanceOccupant)
+                    {
+                        target.InstanceOccupant = user.InstanceOccupant;
+                        changed = true;
+                    }
 
                     target.FriendsWith = user.FriendsWith;
                     target.Permission = user.Permission;
@@ -537,6 +554,8 @@ namespace VRChat_Stalker
             string location = user.Location;
             string userId = user.Id;
 
+            user.InstanceOccupant = "";
+
             if (location == "offline")
             {
                 user.StatusText = "Offline";
@@ -566,8 +585,9 @@ namespace VRChat_Stalker
 
                         if (instance != null && instance.users != null)
                         {
-                            user.StatusText = string.Format("{0} ({1}/{2})", world.name,
-                                instance.users.Count, world.capacity);
+                            user.StatusText = world.name;
+                            user.InstanceOccupant = string.Format("({0}/{1})", instance.users.Count,
+                                world.capacity);
 
                             // 같은 인스턴스에 있으면서 나랑도 친구인 사람을 목록화.
                             user.FriendsWith = instance.users

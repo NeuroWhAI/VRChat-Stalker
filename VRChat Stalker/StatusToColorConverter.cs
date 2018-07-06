@@ -21,7 +21,7 @@ namespace VRChat_Stalker
                         return Brushes.Gray;
 
                     case UserStatus.Online:
-                        return Brushes.LightGreen;
+                        return Brushes.LimeGreen;
 
                     case UserStatus.Private:
                         return Brushes.Yellow;
