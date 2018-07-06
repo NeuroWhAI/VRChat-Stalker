@@ -193,7 +193,8 @@
                         VerticalScrollBarVisibility="Auto"
                         SpellCheck.IsEnabled="True"
                         VerticalAlignment="Stretch"
-                        Height="120" Background="LightGoldenrodYellow"
+                        Height="120" Background="LightGray"
+                     Foreground="Black"
                         VerticalContentAlignment="Top"
                         Text="{Binding Memo, Mode=TwoWay}"
                         Padding="1">
