@@ -23,6 +23,16 @@ namespace VRChat_Stalker
         Legend = 1 << 3,
     }
 
+    public enum WorldTags
+    {
+        None,
+        Public,
+        FriendsPlus,
+        Friends,
+        InvitePlus,
+        Invite,
+    }
+
     public class VRCUser
     {
         public string Id { get; set; }
@@ -100,6 +110,41 @@ namespace VRChat_Stalker
                 }
 
                 return string.Empty;
+            }
+        }
+
+        public WorldTags InstanceAccess
+        {
+            get
+            {
+                string id = InstanceId;
+
+                if(string.IsNullOrWhiteSpace(id))
+                {
+                    return WorldTags.None;
+                }
+
+                if (id.Contains('~'))
+                {
+                    if (id.Contains("hidden"))
+                    {
+                        return WorldTags.FriendsPlus;
+                    }
+                    else if (id.Contains("friends"))
+                    {
+                        return WorldTags.Friends;
+                    }
+                    else if (id.Contains("can"))
+                    {
+                        return WorldTags.InvitePlus;
+                    }
+                    else if (id.Contains("private"))
+                    {
+                        return WorldTags.Invite;
+                    }
+                }
+
+                return WorldTags.Public;
             }
         }
     }

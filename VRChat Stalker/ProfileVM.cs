@@ -34,7 +34,7 @@ namespace VRChat_Stalker
                 Name = "TEST NameLongLongHi",
                 ImageUrl = @"http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
                 Star = 2,
-                Location = "online",
+                Location = "korea:12345~hidden(123ab)~nonce(123fc)",
                 StatusText = "Status TEST Hi ZZfefefefefefefefFafaMamaThx",
                 Permission = UserPermission.Trust | UserPermission.Avatar,
                 Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" },
@@ -68,18 +68,45 @@ namespace VRChat_Stalker
             }
         }
 
-        public bool CanJoin => User.Status == UserStatus.Online;
+        public bool CanJoin => User.Status == UserStatus.Online
+            && (User.InstanceAccess == WorldTags.Public
+            || User.InstanceAccess == WorldTags.FriendsPlus
+            || User.InstanceAccess == WorldTags.Friends);
 
         public string JoinTooltip
         {
             get
             {
-                if (User.FriendsWith.Count <= 0)
+                var buffer = new StringBuilder(User.InstanceNumber);
+
+                var access = User.InstanceAccess;
+                string accessStr = string.Empty;
+
+                switch(access)
                 {
-                    return User.InstanceNumber;
+                    case WorldTags.FriendsPlus:
+                        accessStr = "Friends+";
+                        break;
+
+                    case WorldTags.InvitePlus:
+                        accessStr = "Invite+";
+                        break;
+
+                    case WorldTags.None:
+                        accessStr = string.Empty;
+                        break;
+
+                    default:
+                        accessStr = access.ToString();
+                        break;
                 }
 
-                var buffer = new StringBuilder(User.InstanceNumber);
+                if (string.IsNullOrEmpty(accessStr) == false)
+                {
+                    buffer.Append(" (");
+                    buffer.Append(accessStr);
+                    buffer.Append(")");
+                }
 
                 if (User.FriendsWith.Count > 0)
                 {

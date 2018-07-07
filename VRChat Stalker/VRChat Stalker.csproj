@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccessToTextConverter.cs" />
     <Compile Include="BooleanToPermissonColorConverter.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="OptionVM.cs" />

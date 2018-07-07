@@ -21,6 +21,7 @@
     <Window.Resources>
         <local:StatusToColorConverter x:Key="status2color"/>
         <BooleanToVisibilityConverter x:Key="bool2visible"/>
+        <local:AccessToTextConverter x:Key="access2text"/>
     </Window.Resources>
     <materialDesign:DialogHost Identifier="RootDialog" SnackbarMessageQueue="{Binding ElementName=snackBar, Path=MessageQueue}">
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
@@ -171,39 +172,38 @@
                                                        ToolTip="{Binding Name}" FontWeight="DemiBold"
                                                    FontSize="22">
                                         </TextBlock>
-                                        <Grid VerticalAlignment="Top" Margin="16,6,8,0"
-                                              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                                                       VerticalAlignment="Bottom"
+                                        <TextBlock VerticalAlignment="Top" Margin="16,4,8,0"
+                                              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                            TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                                        HorizontalAlignment="Left"
                                                        Text="{Binding StatusText}"
                                                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
                                                        ToolTip="{Binding StatusText}"
-                                                       FontSize="14"
-                                                       Grid.Column="0">
-                                            </TextBlock>
+                                                       FontSize="14">
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Top" Margin="16,22,8,0"
+                                                    Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
                                             <TextBlock TextWrapping="NoWrap"
-                                                       VerticalAlignment="Bottom"
-                                                       Text="{Binding InstanceOccupant}"
                                                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
-                                                       ToolTip="{Binding InstanceOccupant}"
-                                                       Margin="4,0,4,2" FontSize="10"
-                                                       Grid.Column="1">
+                                                       Text="{Binding InstanceAccess, Converter={StaticResource access2text}}"
+                                                       Margin="0,0,6,0">
                                             </TextBlock>
                                             <TextBlock TextWrapping="NoWrap"
-                                                       VerticalAlignment="Bottom"
                                                        Text="{Binding InstanceNumber}"
                                                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
                                                        ToolTip="{Binding InstanceNumber}"
-                                                       FontSize="14"
-                                                       Grid.Column="2">
+                                                       Margin="4,0">
                                             </TextBlock>
-                                        </Grid>
+                                            <TextBlock TextWrapping="NoWrap"
+                                                       VerticalAlignment="Bottom"
+                                                       Margin="0,0,0,2"
+                                                       Text="{Binding InstanceOccupant}"
+                                                       Style="{DynamicResource MaterialDesignBody2TextBlock}"
+                                                       ToolTip="{Binding InstanceOccupant}"
+                                                       FontSize="10">
+                                            </TextBlock>
+                                        </StackPanel>
                                         
                                         <materialDesign:RatingBar VerticalAlignment="Top" HorizontalAlignment="Right"
                                                                       Max="3" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"

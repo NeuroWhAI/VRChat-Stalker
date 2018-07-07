@@ -43,7 +43,7 @@ namespace VRChat_Stalker
             {
                 IsTracked = true,
                 Id = "test-user",
-                Location = "Korea:12345~nonce(123)~test(456)",
+                Location = "Korea:12345~private(123)~test(456)",
                 StatusText = "LongtextLongtextLongtextLongText",
                 ImageUrl = "http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
                 Name = "TEST User 바나나사과파인애플",
@@ -53,7 +53,7 @@ namespace VRChat_Stalker
             {
                 IsTracked = true,
                 Id = "test-useruser",
-                Location = "Korea:12345~nonce(123)~test(456)",
+                Location = "Korea:12345~hidden(123)~nonce(456)",
                 StatusText = "Korea",
                 ImageUrl = "http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png",
                 Name = "TEST User123",
