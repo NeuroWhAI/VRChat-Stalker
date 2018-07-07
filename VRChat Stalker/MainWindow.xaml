@@ -187,6 +187,7 @@
                                             <TextBlock TextWrapping="NoWrap"
                                                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
                                                        Text="{Binding InstanceAccess, Converter={StaticResource access2text}}"
+                                                       ToolTip="{Binding InstanceAccess, Converter={StaticResource access2text}}"
                                                        Margin="0,0,6,0">
                                             </TextBlock>
                                             <TextBlock TextWrapping="NoWrap"
