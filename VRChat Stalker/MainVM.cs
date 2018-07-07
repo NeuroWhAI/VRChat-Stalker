@@ -416,6 +416,12 @@ namespace VRChat_Stalker
                 {
                     if (target.IsTracked)
                     {
+                        if (target.Name != user.Name)
+                        {
+                            // Alarm name changed.
+                            OnUserChanged(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
+                        }
+
                         if (target.Status != user.Status)
                         {
                             // Alarm status changed.
@@ -426,18 +432,20 @@ namespace VRChat_Stalker
                             if (target.Location != user.Location)
                             {
                                 // Alarm location changed.
-                                OnUserChanged(user.ImageUrl, user.Name, user.StatusText);
+                                if (string.IsNullOrWhiteSpace(user.InstanceNumber))
+                                {
+                                    OnUserChanged(user.ImageUrl, user.Name, user.StatusText);
+                                }
+                                else
+                                {
+                                    OnUserChanged(user.ImageUrl, user.Name,
+                                        string.Format("{0} {1}", user.StatusText, user.InstanceNumber));
+                                }
                             }
                         }
 
                         if (target.Star >= 3)
                         {
-                            if (target.Name != user.Name)
-                            {
-                                // Alarm name changed.
-                                OnUserChanged(user.ImageUrl, user.Name, $"{target.Name} → {user.Name}");
-                            }
-
                             if (target.ImageUrl != user.ImageUrl)
                             {
                                 // Alarm image changed.
@@ -448,6 +456,33 @@ namespace VRChat_Stalker
                             {
                                 // Alarm permission changed.
                                 OnUserChanged(user.ImageUrl, user.Name, "Permission changed");
+                            }
+
+
+                            var newFriends = new List<string>();
+
+                            foreach (string friend in user.FriendsWith)
+                            {
+                                if (!target.FriendsWith.Contains(friend))
+                                {
+                                    newFriends.Add(friend);
+                                }
+                            }
+
+                            if (newFriends.Count > 0)
+                            {
+                                var buffer = new StringBuilder("Now with ");
+
+                                foreach (string friend in newFriends.Skip(1))
+                                {
+                                    buffer.Append(friend);
+                                    buffer.Append(", ");
+                                }
+
+                                buffer.Append(newFriends.First());
+
+                                // Alarm playmate changed.
+                                OnUserChanged(user.ImageUrl, user.Name, buffer.ToString());
                             }
                         }
                     }
