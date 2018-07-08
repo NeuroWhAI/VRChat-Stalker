@@ -106,6 +106,10 @@
                                 <Button Content="Sort by name" Click="Button_Sort_Name_Click"/>
                                 <Button Content="Sort by location" Click="Button_Sort_Location_Click"/>
                                 <Button Content="Sort by star" Click="Button_Sort_Star_Click"/>
+                                <Separator/>
+                                <Button Content="Show all users" Click="Button_Show_All_Click"/>
+                                <Button Content="Hide offline users" Click="Button_Hide_Offline_Click"/>
+                                <Button Content="Hide untracked users" Click="Button_Hide_Untracked_Click"/>
                             </StackPanel>
                         </materialDesign:PopupBox>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">TARGET LIST</TextBlock>

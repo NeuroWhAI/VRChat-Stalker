@@ -167,6 +167,21 @@ namespace VRChat_Stalker
             Vm.SortUsers(SortTypes.Star);
         }
 
+        private void Button_Show_All_Click(object sender, RoutedEventArgs e)
+        {
+            Vm.FilterUsers(this.boxSearch.Text, FilterTypes.All);
+        }
+
+        private void Button_Hide_Offline_Click(object sender, RoutedEventArgs e)
+        {
+            Vm.FilterUsers(this.boxSearch.Text, FilterTypes.HideOffline);
+        }
+
+        private void Button_Hide_Untracked_Click(object sender, RoutedEventArgs e)
+        {
+            Vm.FilterUsers(this.boxSearch.Text, FilterTypes.HideUntracked);
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             Vm.FilterUsers(this.boxSearch.Text);

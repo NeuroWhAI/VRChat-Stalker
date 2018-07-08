@@ -13,6 +13,13 @@ using System.Net;
 
 namespace VRChat_Stalker
 {
+    public enum FilterTypes
+    {
+        All,
+        HideOffline,
+        HideUntracked,
+    }
+
     public class UserChangedEventArgs
     {
         public string ImageUrl { get; set; }
@@ -115,6 +122,7 @@ namespace VRChat_Stalker
             PropertyName = "Star",
             Direction = ListSortDirection.Descending
         };
+        private FilterTypes m_filterType = FilterTypes.All;
 
         private Dictionary<string, int> m_userIdToIndex = new Dictionary<string, int>();
 
@@ -533,12 +541,29 @@ namespace VRChat_Stalker
             m_checkTimer.Start();
         }
 
-        public void FilterUsers(string filter)
+        public void FilterUsers(string filter, FilterTypes? filterType = null)
         {
+            if (filterType.HasValue)
+            {
+                m_filterType = filterType.Value;
+            }
+
             if (string.IsNullOrWhiteSpace(filter))
             {
                 UserListView.Filter = (obj) =>
                 {
+                    if (obj is VRCUser user)
+                    {
+                        switch (m_filterType)
+                        {
+                            case FilterTypes.HideOffline:
+                                return user.Status != UserStatus.Offline;
+
+                            case FilterTypes.HideUntracked:
+                                return user.IsTracked;
+                        }
+                    }
+
                     return true;
                 };
             }
@@ -553,6 +578,15 @@ namespace VRChat_Stalker
                     || user.StatusText.ToLowerInvariant().Contains(lower)
                     || user.Tags.Contains(filter)))
                     {
+                        switch (m_filterType)
+                        {
+                            case FilterTypes.HideOffline:
+                                return user.Status != UserStatus.Offline;
+
+                            case FilterTypes.HideUntracked:
+                                return user.IsTracked;
+                        }
+
                         return true;
                     }
 
