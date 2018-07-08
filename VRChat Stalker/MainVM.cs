@@ -41,9 +41,6 @@ namespace VRChat_Stalker
 
         public MainVM()
         {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-
-
 #if DEBUG
             // TEST
             Users.Add(new VRCUser()

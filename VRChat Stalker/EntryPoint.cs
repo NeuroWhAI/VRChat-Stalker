@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 
 namespace VRChat_Stalker
@@ -14,6 +15,9 @@ namespace VRChat_Stalker
         {
             try
             {
+                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+
                 var app = new App();
                 app.InitializeComponent();
 

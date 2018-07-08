@@ -22,9 +22,6 @@ namespace VRChat_Stalker
 
         public OptionVM()
         {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-
-
 #if DEBUG
             Option = new ProgramOption();
 #endif
