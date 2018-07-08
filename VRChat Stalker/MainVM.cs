@@ -122,7 +122,6 @@ namespace VRChat_Stalker
             PropertyName = "Star",
             Direction = ListSortDirection.Descending
         };
-        private FilterTypes m_filterType = FilterTypes.All;
 
         private Dictionary<string, int> m_userIdToIndex = new Dictionary<string, int>();
 
@@ -159,6 +158,8 @@ namespace VRChat_Stalker
 
             LoadUsers();
 
+            FilterUsers(string.Empty, Option.FilterType);
+
             OnLoading = false;
 
 
@@ -182,6 +183,8 @@ namespace VRChat_Stalker
 
                 SaveUsers().Wait();
             }
+
+            Option.Save();
         }
 
         private Version GetLatestVersion()
@@ -545,7 +548,7 @@ namespace VRChat_Stalker
         {
             if (filterType.HasValue)
             {
-                m_filterType = filterType.Value;
+                Option.FilterType = filterType.Value;
             }
 
             if (string.IsNullOrWhiteSpace(filter))
@@ -554,7 +557,7 @@ namespace VRChat_Stalker
                 {
                     if (obj is VRCUser user)
                     {
-                        switch (m_filterType)
+                        switch (Option.FilterType)
                         {
                             case FilterTypes.HideOffline:
                                 return user.Status != UserStatus.Offline;
@@ -578,7 +581,7 @@ namespace VRChat_Stalker
                     || user.StatusText.ToLowerInvariant().Contains(lower)
                     || user.Tags.Contains(filter)))
                     {
-                        switch (m_filterType)
+                        switch (Option.FilterType)
                         {
                             case FilterTypes.HideOffline:
                                 return user.Status != UserStatus.Offline;
