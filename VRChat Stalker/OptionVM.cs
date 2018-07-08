@@ -39,10 +39,25 @@ namespace VRChat_Stalker
                 m_option = value;
 
                 OnPropertyChanged("Option");
+                OnPropertyChanged("Theme");
                 OnPropertyChanged("StartWhenBoot");
                 OnPropertyChanged("PlaySound");
                 OnPropertyChanged("UpdateCycle");
                 OnPropertyChanged("UpdateCycleText");
+            }
+        }
+
+        public string Theme
+        {
+            get => Option.Theme;
+            set
+            {
+                if (value == "Light" || value == "Dark")
+                {
+                    Option.Theme = value;
+                }
+
+                OnPropertyChanged("Theme");
             }
         }
 

@@ -14,7 +14,7 @@
         xmlns:local="clr-namespace:VRChat_Stalker"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Option" Height="240" Width="340" ResizeMode="CanMinimize"
+        Title="Option" Height="270" Width="340" ResizeMode="CanMinimize"
         Closing="Window_Closing">
     <Window.DataContext>
         <local:OptionVM/>
@@ -26,6 +26,36 @@
         <CheckBox Margin="6,2" IsChecked="{Binding StartWhenBoot, Mode=TwoWay}">
             Start when Windows starts
         </CheckBox>
+        <StackPanel Orientation="Horizontal"
+            Margin="6,2">
+            <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                       VerticalAlignment="Center" Margin="0,0,5,0">
+                Theme :
+            </TextBlock>
+            <ComboBox
+                materialDesign:HintAssist.Hint="Theme"
+                HorizontalAlignment="Left"
+                MinWidth="100"
+                IsEditable="True"
+                Text="{Binding Theme, Mode=TwoWay}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBoxItem>
+                    Light
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Dark
+                </ComboBoxItem>
+            </ComboBox>
+            <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                       VerticalAlignment="Center" Margin="10,0"
+                       Foreground="Orange">
+                Need to restart!
+            </TextBlock>
+        </StackPanel>
 
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,14,0,4">
             Alarm

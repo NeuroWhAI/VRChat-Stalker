@@ -15,10 +15,10 @@ namespace VRChat_Stalker
         {
             if (value is bool && (bool)value)
             {
-                return Brushes.GreenYellow;
+                return Brushes.Orange;
             }
 
-            return Brushes.LightGray;
+            return Brushes.Gray;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

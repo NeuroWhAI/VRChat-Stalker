@@ -43,6 +43,7 @@ namespace VRChat_Stalker
         public bool PlaySound { get; set; } = true;
         public int UpdateCycle { get; set; } = 8;
         public FilterTypes FilterType { get; set; } = FilterTypes.All;
+        public string Theme { get; set; } = "Dark";
 
         public void Load()
         {
@@ -53,7 +54,8 @@ namespace VRChat_Stalker
 
             try
             {
-                Version filterVersion = new Version(1, 0, 9, 0);
+                var filterVersion = new Version(1, 0, 9, 0);
+                var themeVersion = new Version(1, 1, 0, 0);
 
                 using (var br = new BinaryReader(new FileStream("option.dat", FileMode.Open)))
                 {
@@ -66,6 +68,11 @@ namespace VRChat_Stalker
                     if (fileVersion >= filterVersion)
                     {
                         FilterType = (FilterTypes)br.ReadInt32();
+                    }
+
+                    if (fileVersion >= themeVersion)
+                    {
+                        Theme = br.ReadString();
                     }
 
 
@@ -92,6 +99,7 @@ namespace VRChat_Stalker
                     bw.Write(PlaySound);
                     bw.Write(UpdateCycle);
                     bw.Write((int)FilterType);
+                    bw.Write(Theme);
 
 
                     bw.Close();
