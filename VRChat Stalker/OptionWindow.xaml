@@ -19,6 +19,9 @@
     <Window.DataContext>
         <local:OptionVM/>
     </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visible"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical" Margin="6">
         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0,4">
             Program
@@ -52,7 +55,7 @@
             </ComboBox>
             <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}"
                        VerticalAlignment="Center" Margin="10,0"
-                       Foreground="Orange">
+                       Foreground="Orange" Visibility="{Binding NeedRestart, Converter={StaticResource bool2visible}}">
                 Need to restart!
             </TextBlock>
         </StackPanel>

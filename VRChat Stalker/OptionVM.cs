@@ -44,6 +44,18 @@ namespace VRChat_Stalker
             }
         }
 
+        private bool m_needRestart = false;
+        public bool NeedRestart
+        {
+            get => m_needRestart;
+            set
+            {
+                m_needRestart = value;
+
+                OnPropertyChanged("NeedRestart");
+            }
+        }
+
         public string Theme
         {
             get => Option.Theme;
@@ -51,10 +63,15 @@ namespace VRChat_Stalker
             {
                 if (value == "Light" || value == "Dark")
                 {
-                    Option.Theme = value;
-                }
+                    if (Option.Theme != value)
+                    {
+                        Option.Theme = value;
 
-                OnPropertyChanged("Theme");
+                        NeedRestart = true;
+                    }
+
+                    OnPropertyChanged("Theme");
+                }
             }
         }
 
