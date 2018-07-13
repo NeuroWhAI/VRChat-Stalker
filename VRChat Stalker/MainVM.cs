@@ -112,6 +112,7 @@ namespace VRChat_Stalker
 
         public ProgramOption Option { get; set; } = new ProgramOption();
 
+        private readonly object m_lockUserData = new object();
         public ObservableCollection<VRCUser> Users { get; set; } = new ObservableCollection<VRCUser>();
         public ListCollectionView UserListView { get; set; }
         private SortDescription m_sortDesc = new SortDescription()
@@ -234,19 +235,22 @@ namespace VRChat_Stalker
                     {
                         bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
-                        bw.Write(Users.Count);
-
-                        foreach (var user in Users)
+                        lock (m_lockUserData)
                         {
-                            bw.Write(user.Id);
-                            bw.Write(user.Star);
-                            bw.Write(user.IsTracked);
-                            bw.Write(user.Memo);
+                            bw.Write(Users.Count);
 
-                            bw.Write(user.Tags.Count);
-                            foreach (string tag in user.Tags)
+                            foreach (var user in Users)
                             {
-                                bw.Write(tag);
+                                bw.Write(user.Id);
+                                bw.Write(user.Star);
+                                bw.Write(user.IsTracked);
+                                bw.Write(user.Memo);
+
+                                bw.Write(user.Tags.Count);
+                                foreach (string tag in user.Tags)
+                                {
+                                    bw.Write(tag);
+                                }
                             }
                         }
 
@@ -348,8 +352,23 @@ namespace VRChat_Stalker
             m_checkTimer.Stop();
 
 
-            var onlineUsers = await GetFriends(false);
+            try
+            {
+                var onlineUsers = await GetFriends(false);
 
+                lock (m_lockUserData)
+                {
+                    UpdateUsers(onlineUsers);
+                }
+            }
+            finally
+            {
+                m_checkTimer.Start();
+            }
+        }
+
+        private void UpdateUsers(List<VRCUser> onlineUsers)
+        {
             var onlineIndices = new List<int>();
 
             foreach (var user in onlineUsers)
@@ -536,9 +555,6 @@ namespace VRChat_Stalker
                     }
                 }
             }
-
-
-            m_checkTimer.Start();
         }
 
         public void FilterUsers(string filter, FilterTypes? filterType = null)
@@ -659,10 +675,13 @@ namespace VRChat_Stalker
                                 world.capacity);
 
                             // 같은 인스턴스에 있으면서 나랑도 친구인 사람을 목록화.
-                            user.FriendsWith = instance.users
-                                .Where(u => m_userIdToIndex.ContainsKey(u.id) && u.id != userId)
-                                .Select(u => u.displayName)
-                                .ToList();
+                            lock (m_lockUserData)
+                            {
+                                user.FriendsWith = instance.users
+                                    .Where(u => m_userIdToIndex.ContainsKey(u.id) && u.id != userId)
+                                    .Select(u => u.displayName)
+                                    .ToList();
+                            }
                         }
                         else
                         {
@@ -768,6 +787,33 @@ namespace VRChat_Stalker
 
 
             return users;
+        }
+
+        public async Task<bool> DeleteFriend(VRCUser user)
+        {
+            bool onSuccess = await Vrc.FriendsApi.DeleteFriend(user.Id);
+
+            if (onSuccess)
+            {
+                lock (m_lockUserData)
+                {
+                    if (m_userIdToIndex.ContainsKey(user.Id))
+                    {
+                        int index = m_userIdToIndex[user.Id];
+
+                        Users.RemoveAt(index);
+
+                        // Update indices.
+                        for (int i = index; i < Users.Count; ++i)
+                        {
+                            m_userIdToIndex[Users[i].Id] = i;
+                        }
+                    }
+                }
+            }
+
+
+            return onSuccess;
         }
     }
 }

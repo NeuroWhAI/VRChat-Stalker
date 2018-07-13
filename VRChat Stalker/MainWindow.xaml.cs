@@ -226,5 +226,20 @@ namespace VRChat_Stalker
             
             await Vm.SaveUsers();
         }
+
+        private async void DialogHost_DialogClosing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
+        {
+            if (Equals(eventArgs.Parameter, true)
+                && this.listUser.SelectedIndex >= 0
+                && this.listUser.SelectedItem is VRCUser user)
+            {
+                bool success = await Vm.DeleteFriend(user);
+
+                if (!success)
+                {
+                    this.snackBar.MessageQueue.Enqueue("Fail to unfriend!");
+                }
+            }
+        }
     }
 }
