@@ -11,13 +11,9 @@ namespace VRChatApi.Endpoints
 {
     public class UserApi
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-
-        public UserApi(string username, string password)
+        public UserApi()
         {
-            Username = username;
-            Password = password;
+            
         }
 
         public async Task<UserResponse> Login()

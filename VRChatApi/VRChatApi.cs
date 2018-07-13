@@ -16,7 +16,7 @@ namespace VRChatApi
         {
             // initialize endpoint classes
             RemoteConfig = new RemoteConfig();
-            UserApi = new UserApi(username, password);
+            UserApi = new UserApi();
             FriendsApi = new FriendsApi();
             WorldApi = new WorldApi();
 
@@ -28,7 +28,7 @@ namespace VRChatApi
                 Global.HttpClient.BaseAddress = new Uri("https://api.vrchat.cloud/api/1/");
             }
 
-            string authEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{UserApi.Username}:{UserApi.Password}"));
+            string authEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
 
             var header = Global.HttpClient.DefaultRequestHeaders;
             if (header.Contains("Authorization"))
