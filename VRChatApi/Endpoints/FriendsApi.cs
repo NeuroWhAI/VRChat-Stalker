@@ -47,15 +47,17 @@ namespace VRChatApi.Endpoints
         }
 
         // TODO: proper return type, need to document
-        public async Task<string> DeleteFriend(string userId)
+        public async Task<bool> DeleteFriend(string userId)
         {
             HttpResponseMessage response = await Global.HttpClient.DeleteAsync($"auth/user/friends/{userId}?apiKey={Global.ApiKey}");
 
-            string res = "";
+            bool res = false;
 
             if (response.IsSuccessStatusCode)
             {
-                res = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
+
+                res = json.Contains("success");
             }
 
             return res;
