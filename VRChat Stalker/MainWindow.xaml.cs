@@ -94,10 +94,14 @@ namespace VRChat_Stalker
             if (tag == "Logout")
             {
                 // Logout
+                m_willExit = true;
+
                 var loginWin = new LoginWindow();
                 loginWin.AutoLogin = false;
                 Application.Current.MainWindow = loginWin;
+
                 this.Close();
+
                 loginWin.Show();
             }
             else if (tag == "Option")
