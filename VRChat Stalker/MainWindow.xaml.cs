@@ -239,7 +239,11 @@ namespace VRChat_Stalker
             {
                 bool success = await Vm.DeleteFriend(user);
 
-                if (!success)
+                if (success)
+                {
+                    this.snackBar.MessageQueue.Enqueue("Successfully deleted!");
+                }
+                else
                 {
                     this.snackBar.MessageQueue.Enqueue("Fail to unfriend!");
                 }
