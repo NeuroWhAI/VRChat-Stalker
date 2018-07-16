@@ -25,6 +25,11 @@ namespace VRChat_Stalker
 
                 app.Run();
             }
+            catch (TaskCanceledException e)
+            {
+                Console.Error.WriteLine(e.Message);
+                Console.Error.WriteLine(e.StackTrace);
+            }
             catch (Exception e)
             {
                 MessageBox.Show($@"There was a problem that could not be handled.
@@ -33,7 +38,7 @@ Please capture the contents below.
 아래 내용을 캡쳐하여 보내주세요.
 
 {e.Message}
-{e.StackTrace}", "Error!");
+{e.StackTrace}", "VRChat Stalker");
             }
         }
 
