@@ -192,7 +192,7 @@
                                         </Grid.RowDefinitions>
                                         <Ellipse Margin="4,4,0,4" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"
                                                      Height="90" Width="90"
-                                                     ToolTip="{Binding Id}"
+                                                     ToolTip="{Binding Memo}"
                                                  Stroke="{Binding Status, Converter={StaticResource status2color}}"
                                                  StrokeThickness="4">
                                             <Ellipse.Fill>
