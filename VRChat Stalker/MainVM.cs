@@ -702,7 +702,19 @@ namespace VRChat_Stalker
 
             while (true)
             {
-                var friends = await Vrc.FriendsApi.Get(offset, 20, isOffline);
+                List<VRChatApi.Classes.UserBriefResponse> friends = null;
+
+                try
+                {
+                    friends = await Vrc.FriendsApi.Get(offset, 20, isOffline);
+                }
+                catch (Exception e)
+                {
+                    friends = null;
+
+                    Console.Error.WriteLine(e.Message);
+                    Console.Error.WriteLine(e.StackTrace);
+                }
 
                 if (friends == null)
                 {

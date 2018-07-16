@@ -11,6 +11,8 @@ namespace VRChat_Stalker
     {
         private readonly object m_lockCache = new object();
         private Dictionary<string, WorldResponse> m_cache = new Dictionary<string, WorldResponse>();
+        private readonly object m_lockInstCache = new object();
+        private Dictionary<string, WorldInstanceResponse> m_instCache = new Dictionary<string, WorldInstanceResponse>();
 
         public async Task<WorldResponse> GetWorld(VRChatApi.VRChatApi vrc, string id)
         {
@@ -22,24 +24,77 @@ namespace VRChat_Stalker
                 }
             }
 
-            WorldResponse res = await vrc.WorldApi.Get(id);
-
-            if (res != null)
+            
+            for (int retry = 0; retry < 3; ++retry)
             {
-                lock (m_lockCache)
+                try
                 {
-                    m_cache[id] = res;
+                    var res = await vrc.WorldApi.Get(id);
+                    
+                    if (res != null)
+                    {
+                        lock (m_lockCache)
+                        {
+                            m_cache[id] = res;
+                        }
+
+                        return res;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    Console.Error.WriteLine(e.StackTrace);
+
+                    await Task.Delay(1000);
                 }
             }
 
-            return res;
+
+            return null;
         }
 
         public async Task<WorldInstanceResponse> GetInstance(VRChatApi.VRChatApi vrc, string worldId, string instanceId)
         {
-            WorldInstanceResponse res = await vrc.WorldApi.GetInstance(worldId, instanceId);
+            string key = worldId + "&" + instanceId;
 
-            return res;
+
+            for (int retry = 0; retry < 3; ++retry)
+            {
+                try
+                {
+                    var res = await vrc.WorldApi.GetInstance(worldId, instanceId);
+
+                    if (res != null)
+                    {
+                        lock (m_lockInstCache)
+                        {
+                            m_instCache[key] = res;
+                        }
+
+                        return res;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    Console.Error.WriteLine(e.StackTrace);
+
+                    await Task.Delay(1000);
+                }
+            }
+
+
+            lock (m_lockInstCache)
+            {
+                if (m_instCache.ContainsKey(key))
+                {
+                    return m_instCache[key];
+                }
+            }
+
+
+            return null;
         }
     }
 }
