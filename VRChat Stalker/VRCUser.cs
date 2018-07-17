@@ -147,5 +147,18 @@ namespace VRChat_Stalker
                 return WorldTags.Public;
             }
         }
+
+        public string ProfileTooltip
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.Memo))
+                {
+                    return this.Id;
+                }
+
+                return this.Memo;
+            }
+        }
     }
 }
