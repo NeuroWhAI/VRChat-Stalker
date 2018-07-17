@@ -402,6 +402,7 @@ namespace VRChat_Stalker
                 {
                     user.Location = "offline";
                     user.StatusText = "Offline";
+                    user.InstanceOccupant = "";
                     user.FriendsWith.Clear();
 
                     // Refresh
