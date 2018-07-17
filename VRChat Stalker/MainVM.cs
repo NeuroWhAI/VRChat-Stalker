@@ -828,5 +828,20 @@ namespace VRChat_Stalker
 
             return onSuccess;
         }
+
+        public void RefreshUser(string id)
+        {
+            lock (m_lockUserData)
+            {
+                if (m_userIdToIndex.ContainsKey(id))
+                {
+                    int index = m_userIdToIndex[id];
+
+                    var user = Users[index];
+                    Users.RemoveAt(index);
+                    Users.Insert(index, user);
+                }
+            }
+        }
     }
 }
