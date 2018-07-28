@@ -150,13 +150,21 @@ namespace VRChat_Stalker
             this.btnToggleMenu.IsChecked = false;
 
 
-            if (tag == "Discord")
+            if (tag == "Github")
+            {
+                System.Diagnostics.Process.Start("https://github.com/NeuroWhAI/VRChat-Stalker");
+            }
+            else if (tag == "Api")
+            {
+                System.Diagnostics.Process.Start("http://vrchatapi.github.io");
+            }
+            else if (tag == "Discord")
             {
                 System.Diagnostics.Process.Start("https://discord.gg/j7qhVm2");
             }
-            else if (tag == "Github")
+            else if (tag == "Blog")
             {
-                System.Diagnostics.Process.Start("https://github.com/NeuroWhAI/VRChat-Stalker");
+                System.Diagnostics.Process.Start("http://neurowhai.tistory.com/202");
             }
         }
 
