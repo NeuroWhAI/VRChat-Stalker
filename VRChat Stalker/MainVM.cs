@@ -747,19 +747,23 @@ namespace VRChat_Stalker
                     {
                         if (tag.Contains("legend"))
                         {
-                            user.Permission |= UserPermission.Legend;
+                            user.Permission |= UserTags.Legend;
                         }
                         else if (tag.Contains("avatar"))
                         {
-                            user.Permission |= UserPermission.Avatar;
+                            user.Permission |= UserTags.Avatar;
                         }
                         else if (tag.Contains("world"))
                         {
-                            user.Permission |= UserPermission.World;
+                            user.Permission |= UserTags.World;
                         }
                         else if (tag.Contains("trust"))
                         {
-                            user.Permission |= UserPermission.Trust;
+                            user.Permission |= UserTags.Trust;
+                        }
+                        else if (tag.Contains("troll"))
+                        {
+                            user.Permission |= UserTags.Troll;
                         }
                     }
 

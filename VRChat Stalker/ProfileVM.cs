@@ -36,7 +36,7 @@ namespace VRChat_Stalker
                 Star = 2,
                 Location = "korea:12345~hidden(123ab)~nonce(123fc)",
                 StatusText = "Status TEST Hi ZZfefefefefefefefFafaMamaThx",
-                Permission = UserPermission.Trust | UserPermission.Avatar,
+                Permission = VRChat_Stalker.UserTags.Trust | VRChat_Stalker.UserTags.Avatar,
                 Tags = new HashSet<string> { "test", "banana", "cookie", "서벌", "타노C", "파세파세호" },
                 InstanceOccupant = "(22/20)",
             };
@@ -126,10 +126,11 @@ namespace VRChat_Stalker
             }
         }
 
-        public bool IsTrusted => (User.Permission & UserPermission.Trust) == UserPermission.Trust;
-        public bool HasAvatarTag => (User.Permission & UserPermission.Avatar) == UserPermission.Avatar;
-        public bool HasWorldTag => (User.Permission & UserPermission.World) == UserPermission.World;
-        public bool HasLegendTag => (User.Permission & UserPermission.Legend) == UserPermission.Legend;
+        public bool IsTrusted => (User.Permission & VRChat_Stalker.UserTags.Trust) == VRChat_Stalker.UserTags.Trust;
+        public bool HasAvatarTag => (User.Permission & VRChat_Stalker.UserTags.Avatar) == VRChat_Stalker.UserTags.Avatar;
+        public bool HasWorldTag => (User.Permission & VRChat_Stalker.UserTags.World) == VRChat_Stalker.UserTags.World;
+        public bool HasLegendTag => (User.Permission & VRChat_Stalker.UserTags.Legend) == VRChat_Stalker.UserTags.Legend;
+        public bool HasTrollTag => (User.Permission & VRChat_Stalker.UserTags.Troll) == VRChat_Stalker.UserTags.Troll;
 
         public ObservableCollection<string> UserTags { get; set; } = new ObservableCollection<string>();
 

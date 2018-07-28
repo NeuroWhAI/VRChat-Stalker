@@ -115,6 +115,12 @@
                                 Fill="{Binding HasLegendTag, Converter={StaticResource bool2permission}}" />
                     </Canvas>
                 </Viewbox>
+                <Viewbox Width="18" Height="18" Margin="1,0" ToolTip="Troll">
+                    <Canvas Width="24" Height="24">
+                        <Path Data="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"
+                              Fill="{Binding HasTrollTag, Converter={StaticResource bool2permission}}"/>
+                    </Canvas>
+                </Viewbox>
             </StackPanel>
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto"
                             Margin="10,0,10,0">

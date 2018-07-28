@@ -14,13 +14,14 @@ namespace VRChat_Stalker
     }
 
     [Flags]
-    public enum UserPermission
+    public enum UserTags
     {
         None = 0,
         Trust = 1,
         Avatar = 1 << 1,
         World = 1 << 2,
         Legend = 1 << 3,
+        Troll = 1 << 4,
     }
 
     public enum WorldTags
@@ -45,7 +46,7 @@ namespace VRChat_Stalker
         public string InstanceOccupant { get; set; }
         public string Memo { get; set; } = "";
         public List<string> FriendsWith { get; set; } = new List<string>();
-        public UserPermission Permission { get; set; } = UserPermission.None;
+        public UserTags Permission { get; set; } = UserTags.None;
         public HashSet<string> Tags { get; set; } = new HashSet<string>();
 
         public UserStatus Status
