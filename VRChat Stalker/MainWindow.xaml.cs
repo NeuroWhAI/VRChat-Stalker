@@ -140,6 +140,26 @@ namespace VRChat_Stalker
             }
         }
 
+        private void ListBoxItem_Bottom_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as ListBoxItem;
+            string tag = (string)item.Tag;
+
+
+            // Close side menu.
+            this.btnToggleMenu.IsChecked = false;
+
+
+            if (tag == "Discord")
+            {
+                System.Diagnostics.Process.Start("https://discord.gg/j7qhVm2");
+            }
+            else if (tag == "Github")
+            {
+                System.Diagnostics.Process.Start("https://github.com/NeuroWhAI/VRChat-Stalker");
+            }
+        }
+
         private void ShowDownloadAlarm()
         {
             if (this.Visibility == Visibility.Visible)
