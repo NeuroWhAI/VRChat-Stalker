@@ -65,6 +65,7 @@ namespace VRChat_Stalker
                 OnPropertyChanged("HasAvatarTag");
                 OnPropertyChanged("HasWorldTag");
                 OnPropertyChanged("HasLegendTag");
+                OnPropertyChanged("HasTrollTag");
             }
         }
 
