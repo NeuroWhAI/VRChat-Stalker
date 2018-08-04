@@ -74,7 +74,7 @@
             <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center">
                 Update cycle(s) :
             </TextBlock>
-            <Slider Minimum="4" Maximum="60" Style="{StaticResource MaterialDesignSlider}"
+            <Slider Minimum="60" Maximum="180" Style="{StaticResource MaterialDesignSlider}"
                     Width="100" Margin="8,0" Value="{Binding UpdateCycle, Mode=TwoWay}" />
             <TextBlock Style="{DynamicResource MaterialDesignBody1TextBlock}" VerticalAlignment="Center"
                        Text="{Binding UpdateCycleText}">

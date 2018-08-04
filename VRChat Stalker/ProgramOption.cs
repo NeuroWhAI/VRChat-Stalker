@@ -41,7 +41,7 @@ namespace VRChat_Stalker
         }
 
         public bool PlaySound { get; set; } = true;
-        public int UpdateCycle { get; set; } = 8;
+        public int UpdateCycle { get; set; } = 60;
         public FilterTypes FilterType { get; set; } = FilterTypes.All;
         public string Theme { get; set; } = "Dark";
 
@@ -64,6 +64,11 @@ namespace VRChat_Stalker
                     StartWhenBoot = br.ReadBoolean();
                     PlaySound = br.ReadBoolean();
                     UpdateCycle = br.ReadInt32();
+
+                    if (UpdateCycle < 60)
+                    {
+                        UpdateCycle = 60;
+                    }
 
                     if (fileVersion >= filterVersion)
                     {

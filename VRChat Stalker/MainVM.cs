@@ -700,6 +700,7 @@ namespace VRChat_Stalker
 
             int offset = 0;
             int retry = 3;
+            int maxFriendsCount = 99;
 
             while (true)
             {
@@ -707,7 +708,7 @@ namespace VRChat_Stalker
 
                 try
                 {
-                    friends = await Vrc.FriendsApi.Get(offset, 20, isOffline);
+                    friends = await Vrc.FriendsApi.Get(offset, maxFriendsCount, isOffline);
                 }
                 catch (Exception e)
                 {
@@ -772,7 +773,7 @@ namespace VRChat_Stalker
                     users.Add(user);
                 }
 
-                if (friends.Count < 20)
+                if (friends.Count < maxFriendsCount)
                 {
                     break;
                 }

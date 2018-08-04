@@ -109,7 +109,7 @@ namespace VRChat_Stalker
             }
         }
 
-        public string UpdateCycleText => string.Format("{0}s", UpdateCycle);
+        public string UpdateCycleText => string.Format("{0}m {1}s", UpdateCycle / 60, UpdateCycle % 60);
 
         public void Close()
         {
