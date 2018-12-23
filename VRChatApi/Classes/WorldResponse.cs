@@ -13,10 +13,9 @@ namespace VRChatApi.Classes
     {
         public string id { get; set; }
         public string assetUrl { get; set; }
-        public string pluginUrl { get; set; }
         public string unityVersion { get; set; }
-        public int unitySortNumber { get; set; }
-        public int assetVersion { get; set; }
+        public string unitySortNumber { get; set; }
+        public string assetVersion { get; set; }
         public string platform { get; set; }
         [JsonProperty(PropertyName = "created_at")]
         public string createdTime { get; set; }
@@ -47,14 +46,8 @@ namespace VRChatApi.Classes
         public string assetUrl { get; set; }
         public string pluginUrl { get; set; }
         public string unityPackageUrl { get; set; }
-        [JsonProperty(PropertyName = "namespace")]
-        public string nameSpace { get; set; } // Unknown
-        public bool unityPackageUpdated { get; set; } // Unknown
         public List<UnityPackage> unityPackages { get; set; }
-        public bool isSecure { get; set; } // Unknown
-        public bool isLockdown { get; set; } // Unknown
         public int version { get; set; }
-        public string organization { get; set; } // Unknown
         [JsonProperty(PropertyName = "instances")]
         public List<JArray> _instances { get; set; }
         [JsonIgnore]

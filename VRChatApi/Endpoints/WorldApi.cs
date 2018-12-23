@@ -21,6 +21,7 @@ namespace VRChatApi.Endpoints
 
             if (response.IsSuccessStatusCode)
             {
+                string json = await response.Content.ReadAsStringAsync();
                 res = await response.Content.ReadAsAsync<WorldResponse>();
 
                 // Parse instances.
