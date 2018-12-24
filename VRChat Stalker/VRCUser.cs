@@ -48,6 +48,7 @@ namespace VRChat_Stalker
         public List<string> FriendsWith { get; set; } = new List<string>();
         public UserTags Permission { get; set; } = UserTags.None;
         public HashSet<string> Tags { get; set; } = new HashSet<string>();
+        public string StatusDescription { get; set; }
 
         public UserStatus Status
         {
@@ -149,16 +150,40 @@ namespace VRChat_Stalker
             }
         }
 
+        /// <summary>
+        /// 친구 목록 화면에서의 상태 정보
+        /// </summary>
         public string ProfileTooltip
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(this.Memo))
                 {
-                    return this.Id;
+                    if (string.IsNullOrWhiteSpace(this.StatusDescription))
+                    {
+                        return this.Id;
+                    }
+
+                    return this.StatusDescription;
                 }
 
                 return this.Memo;
+            }
+        }
+
+        /// <summary>
+        /// 프로필 화면에서의 상태 정보
+        /// </summary>
+        public string StatusTooltip
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.StatusDescription))
+                {
+                    return this.Id;
+                }
+
+                return this.StatusDescription;
             }
         }
     }

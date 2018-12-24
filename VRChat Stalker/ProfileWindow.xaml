@@ -75,7 +75,7 @@
                 <Ellipse DataContext="{Binding User}"
                             Margin="0,20,0,0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
                             Height="90" Width="90"
-                            ToolTip="{Binding Id}"
+                            ToolTip="{Binding StatusTooltip}"
                          Stroke="{Binding Status, Converter={StaticResource status2color}}"
                          StrokeThickness="4">
                     <Ellipse.Fill>

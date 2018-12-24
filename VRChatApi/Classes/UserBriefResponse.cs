@@ -12,5 +12,6 @@ namespace VRChatApi.Classes
         public List<string> tags { get; set; }
         public string developerType { get; set; }
         public string location { get; set; }
+        public string statusDescription { get; set; }
     }
 }

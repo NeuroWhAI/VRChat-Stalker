@@ -742,6 +742,7 @@ namespace VRChat_Stalker
                         Name = res.displayName,
                         Location = res.location,
                         ImageUrl = res.currentAvatarThumbnailImageUrl,
+                        StatusDescription = res.statusDescription,
                     };
 
                     foreach (string tag in res.tags)
