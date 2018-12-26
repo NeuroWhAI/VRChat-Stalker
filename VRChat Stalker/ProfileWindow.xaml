@@ -180,12 +180,12 @@
                            Style="{DynamicResource MaterialDesignBody2TextBlock}"
                            Text="{Binding InstanceOccupant}" Margin="2,0" VerticalAlignment="Center"
                            TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                           ToolTip="{Binding JoinTooltip}" FontSize="10">
+                           ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.JoinTooltip}" FontSize="10">
                 </TextBlock>
                 <Button Height="Auto" VerticalAlignment="Center" Margin="4,0,0,0" Grid.Column="3"
                         Visibility="{Binding CanJoin, Converter={StaticResource bool2visible}}"
                         Command="{Binding CmdJoin}"
-                        ToolTip="{Binding JoinTooltip}">
+                        ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.JoinTooltip}">
                     Join
                 </Button>
             </Grid>
