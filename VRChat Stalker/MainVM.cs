@@ -405,10 +405,6 @@ namespace VRChat_Stalker
                     user.InstanceOccupant = "";
                     user.FriendsWith.Clear();
 
-                    // Refresh
-                    Users.RemoveAt(i);
-                    Users.Insert(i, user);
-
                     // Alarm offline.
                     if (user.IsTracked)
                     {
@@ -470,6 +466,12 @@ namespace VRChat_Stalker
                                         string.Format("{0} {1}", user.StatusText, user.InstanceNumber));
                                 }
                             }
+                            else if (target.StatusDescription != user.StatusDescription
+                                && string.IsNullOrWhiteSpace(user.StatusDescription) == false)
+                            {
+                                // Alarm status description changed.
+                                OnUserChanged(user.ImageUrl, user.Name, user.StatusDescription);
+                            }
                         }
 
                         if (target.Star >= 3)
@@ -516,44 +518,7 @@ namespace VRChat_Stalker
                     }
 
 
-                    bool changed = false;
-
-                    if (target.Name != user.Name)
-                    {
-                        target.Name = user.Name;
-                        changed = true;
-                    }
-                    if (target.Location != user.Location)
-                    {
-                        target.Location = user.Location;
-                        changed = true;
-                    }
-                    if (target.ImageUrl != user.ImageUrl)
-                    {
-                        target.ImageUrl = user.ImageUrl;
-                        changed = true;
-                    }
-                    if (target.StatusText != user.StatusText)
-                    {
-                        target.StatusText = user.StatusText;
-                        changed = true;
-                    }
-                    if (target.InstanceOccupant != user.InstanceOccupant)
-                    {
-                        target.InstanceOccupant = user.InstanceOccupant;
-                        changed = true;
-                    }
-
-                    target.FriendsWith = user.FriendsWith;
-                    target.Permission = user.Permission;
-
-
-                    if (changed)
-                    {
-                        // Refresh
-                        Users.RemoveAt(targetIndex);
-                        Users.Insert(targetIndex, target);
-                    }
+                    target.Update(user);
                 }
             }
         }
@@ -833,21 +798,6 @@ namespace VRChat_Stalker
 
 
             return onSuccess;
-        }
-
-        public void RefreshUser(string id)
-        {
-            lock (m_lockUserData)
-            {
-                if (m_userIdToIndex.ContainsKey(id))
-                {
-                    int index = m_userIdToIndex[id];
-
-                    var user = Users[index];
-                    Users.RemoveAt(index);
-                    Users.Insert(index, user);
-                }
-            }
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace VRChat_Stalker
 {
@@ -34,21 +36,172 @@ namespace VRChat_Stalker
         Invite,
     }
 
-    public class VRCUser
+    public class VRCUser : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        // 최신 정보를 담은 newData의 데이터를 적용.
+        // 네트워크에서 지속적으로 받아오는 정보가 아니면 적용하지 않음.
+        public void Update(VRCUser newData)
+        {
+            Name = newData.Name;
+            Location = newData.Location;
+            ImageUrl = newData.ImageUrl;
+            StatusText = newData.StatusText;
+            InstanceOccupant = newData.InstanceOccupant;
+            StatusDescription = newData.StatusDescription;
+            FriendsWith = newData.FriendsWith.ToList(); // Deep copy
+            Permission = newData.Permission;
+        }
+
         public string Id { get; set; }
-        public string Name { get; set; }
-        public string Location { get; set; }
-        public int Star { get; set; } = 1;
-        public bool IsTracked { get; set; } = false;
-        public string ImageUrl { get; set; }
-        public string StatusText { get; set; }
-        public string InstanceOccupant { get; set; }
-        public string Memo { get; set; } = "";
+
+        private string m_name;
+        public string Name
+        {
+            get => m_name;
+            set
+            {
+                if(value != m_name)
+                {
+                    m_name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_location;
+        public string Location
+        {
+            get => m_location;
+            set
+            {
+                if (value != m_location)
+                {
+                    m_location = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("Status");
+                    NotifyPropertyChanged("WorldId");
+                    NotifyPropertyChanged("InstanceId");
+                    NotifyPropertyChanged("InstanceNumber");
+                    NotifyPropertyChanged("InstanceAccess");
+                }
+            }
+        }
+
+        private int m_star = 1;
+        public int Star
+        {
+            get => m_star;
+            set
+            {
+                if (value != m_star)
+                {
+                    m_star = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private bool m_isTracked = false;
+        public bool IsTracked
+        {
+            get => m_isTracked;
+            set
+            {
+                if (value != m_isTracked)
+                {
+                    m_isTracked = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_imageUrl;
+        public string ImageUrl
+        {
+            get => m_imageUrl;
+            set
+            {
+                if (value != m_imageUrl)
+                {
+                    m_imageUrl = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_statusText;
+        public string StatusText
+        {
+            get => m_statusText;
+            set
+            {
+                if (value != m_statusText)
+                {
+                    m_statusText = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_instanceOccupant;
+        public string InstanceOccupant
+        {
+            get => m_instanceOccupant;
+            set
+            {
+                if (value != m_instanceOccupant)
+                {
+                    m_instanceOccupant = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_memo = "";
+        public string Memo
+        {
+            get => m_memo;
+            set
+            {
+                if (value != m_memo)
+                {
+                    m_memo = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("ProfileTooltip");
+                }
+            }
+        }
+
+        private string m_statusDescription;
+        public string StatusDescription
+        {
+            get => m_statusDescription;
+            set
+            {
+                if (value != m_statusDescription)
+                {
+                    m_statusDescription = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("ProfileTooltip");
+                    NotifyPropertyChanged("StatusTooltip");
+                }
+            }
+        }
+
+
         public List<string> FriendsWith { get; set; } = new List<string>();
         public UserTags Permission { get; set; } = UserTags.None;
         public HashSet<string> Tags { get; set; } = new HashSet<string>();
-        public string StatusDescription { get; set; }
 
         public UserStatus Status
         {

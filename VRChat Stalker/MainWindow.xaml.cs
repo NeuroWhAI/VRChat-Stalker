@@ -255,9 +255,6 @@ namespace VRChat_Stalker
             profileWin.ShowDialog();
             profileWin.Close();
 
-
-            Vm.RefreshUser(user.Id);
-
             
             await Vm.SaveUsers();
         }
