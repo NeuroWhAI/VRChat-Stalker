@@ -45,9 +45,15 @@ namespace VRChat_Stalker
         public FilterTypes FilterType { get; set; } = FilterTypes.All;
         public string Theme { get; set; } = "Dark";
 
-        public void Load()
+        public void Load(bool loadBackup = false)
         {
-            if (File.Exists("option.dat") == false)
+            string fileName = "option.dat";
+            if (loadBackup)
+            {
+                fileName = "bak_option.dat";
+            }
+
+            if (File.Exists(fileName) == false)
             {
                 return;
             }
@@ -57,7 +63,7 @@ namespace VRChat_Stalker
                 var filterVersion = new Version(1, 0, 9, 0);
                 var themeVersion = new Version(1, 1, 0, 0);
 
-                using (var br = new BinaryReader(new FileStream("option.dat", FileMode.Open)))
+                using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 {
                     Version fileVersion = Version.Parse(br.ReadString());
 
@@ -86,6 +92,10 @@ namespace VRChat_Stalker
             }
             catch (Exception)
             {
+                if (loadBackup == false)
+                {
+                    Load(true);
+                }
 #if DEBUG
                 throw;
 #endif
@@ -96,7 +106,7 @@ namespace VRChat_Stalker
         {
             try
             {
-                using (var bw = new BinaryWriter(new FileStream("_option.dat", FileMode.Create)))
+                using (var bw = new BinaryWriter(new FileStream("bak_option.dat", FileMode.Create)))
                 {
                     bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
@@ -110,8 +120,7 @@ namespace VRChat_Stalker
                     bw.Close();
                 }
 
-                File.Copy("_option.dat", "option.dat", true);
-                File.Delete("_option.dat");
+                File.Copy("bak_option.dat", "option.dat", true);
             }
             catch (Exception)
             {

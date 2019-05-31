@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="VRChat Stalker" Height="600" Width="420" WindowStartupLocation="CenterScreen"
-        Closing="Window_Closing" Loaded="Window_Loaded">
+        Closing="Window_Closing" Loaded="Window_Loaded" Deactivated="Window_Deactivated">
     <Window.DataContext>
         <local:MainVM/>
     </Window.DataContext>

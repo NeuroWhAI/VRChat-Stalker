@@ -178,11 +178,7 @@ namespace VRChat_Stalker
             if (m_checkTimer.IsEnabled)
             {
                 m_checkTimer.Stop();
-
-                SaveUsers().Wait();
             }
-
-            Option.Save();
         }
 
         private Version GetLatestVersion()
@@ -225,18 +221,28 @@ namespace VRChat_Stalker
             return latestVersion > thisVersion;
         }
 
+        public void SaveOption()
+        {
+            Option.Save();
+        }
+
         public Task SaveUsers()
         {
             return Task.Factory.StartNew(()=>
             {
+                if (OnLoading)
+                {
+                    return;
+                }
+
                 try
                 {
-                    using (var bw = new BinaryWriter(new FileStream("_users.dat", FileMode.Create)))
+                    lock (m_lockUserData)
                     {
-                        bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-                        lock (m_lockUserData)
+                        using (var bw = new BinaryWriter(new FileStream("bak_users.dat", FileMode.Create)))
                         {
+                            bw.Write(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
                             bw.Write(Users.Count);
 
                             foreach (var user in Users)
@@ -252,14 +258,13 @@ namespace VRChat_Stalker
                                     bw.Write(tag);
                                 }
                             }
+
+
+                            bw.Close();
                         }
 
-
-                        bw.Close();
+                        File.Copy("bak_users.dat", "users.dat", true);
                     }
-
-                    File.Copy("_users.dat", "users.dat", true);
-                    File.Delete("_users.dat");
                 }
                 catch (Exception)
                 {
@@ -270,9 +275,15 @@ namespace VRChat_Stalker
             });
         }
 
-        private void LoadUsers()
+        private void LoadUsers(bool loadBackup = false)
         {
-            if (File.Exists("users.dat") == false)
+            string fileName = "users.dat";
+            if (loadBackup)
+            {
+                fileName = "bak_users.dat";
+            }
+
+            if (File.Exists(fileName) == false)
             {
                 return;
             }
@@ -282,7 +293,7 @@ namespace VRChat_Stalker
                 Version memoVersion = new Version(1, 0, 4, 0);
                 Version tagVersion = new Version(1, 0, 5, 0);
 
-                using (var br = new BinaryReader(new FileStream("users.dat", FileMode.Open)))
+                using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open)))
                 {
                     Version fileVersion = Version.Parse(br.ReadString());
 
@@ -328,6 +339,11 @@ namespace VRChat_Stalker
             }
             catch (Exception)
             {
+                if (loadBackup == false)
+                {
+                    LoadUsers(true);
+                }
+
 #if DEBUG
                 throw;
 #endif

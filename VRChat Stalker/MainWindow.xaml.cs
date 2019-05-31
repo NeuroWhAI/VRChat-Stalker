@@ -42,13 +42,6 @@ namespace VRChat_Stalker
 
         private bool m_willExit = false;
 
-        private async Task HideAndSave()
-        {
-            this.Hide();
-
-            await Vm.SaveUsers();
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Vm.Init();
@@ -61,7 +54,7 @@ namespace VRChat_Stalker
             }
         }
 
-        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (this.Visibility == Visibility.Visible && m_willExit == false)
             {
@@ -69,7 +62,7 @@ namespace VRChat_Stalker
 
                 e.Cancel = true;
 
-                await HideAndSave();
+                this.Hide();
             }
             else
             {
@@ -81,7 +74,7 @@ namespace VRChat_Stalker
             }
         }
 
-        private async void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = sender as ListBoxItem;
             string tag = (string)item.Tag;
@@ -129,7 +122,7 @@ namespace VRChat_Stalker
             else if (tag == "Hide")
             {
                 // Hide
-                await this.HideAndSave();
+                this.Hide();
             }
             else if (tag == "Exit")
             {
@@ -235,7 +228,7 @@ namespace VRChat_Stalker
             this.listUser.UnselectAll();
         }
 
-        private async void MenuItem_Details_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Details_Click(object sender, RoutedEventArgs e)
         {
             if (this.listUser.SelectedIndex < 0)
             {
@@ -254,9 +247,6 @@ namespace VRChat_Stalker
             profileWin.Owner = this;
             profileWin.ShowDialog();
             profileWin.Close();
-
-            
-            await Vm.SaveUsers();
         }
 
         private async void DialogHost_DialogClosing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
@@ -276,6 +266,12 @@ namespace VRChat_Stalker
                     this.snackBar.MessageQueue.Enqueue("Fail to unfriend!");
                 }
             }
+        }
+
+        private async void Window_Deactivated(object sender, EventArgs e)
+        {
+            await Vm.SaveUsers();
+            Vm.SaveOption();
         }
     }
 }
