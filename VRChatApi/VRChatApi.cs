@@ -26,6 +26,7 @@ namespace VRChatApi
             {
                 Global.HttpClient = new HttpClient();
                 Global.HttpClient.BaseAddress = new Uri("https://api.vrchat.cloud/api/1/");
+                Global.HttpClient.DefaultRequestHeaders.Add("User-Agent", "VRChat-Stalker ");
             }
 
             string authEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));

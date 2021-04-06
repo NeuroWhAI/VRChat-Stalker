@@ -26,8 +26,22 @@ namespace VRChatApi.Endpoints
             {
                 string json = await response.Content.ReadAsStringAsync();
                 res = JsonConvert.DeserializeObject<UserResponse>(json);
-            }
 
+                var cookie = response.Headers.GetValues("Set-Cookie");
+                var header = Global.HttpClient.DefaultRequestHeaders;
+                
+                if (header.Contains("Authorization"))
+                {
+                    header.Remove("Authorization");
+                }
+                if (header.Contains("Cookie"))
+                {
+                    header.Remove("Cookie");
+                }
+                header.Add("Cookie", cookie);
+
+            }
+            
             return res;
         }
 
